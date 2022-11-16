@@ -53,5 +53,7 @@ dkms.conf
 
 !*.c
 !*.h
-/Listings/
-/Objects/
+/51A4/Listings/
+/51A4/Objects/
+/51A7/Listings/
+/51A7/Objects/
