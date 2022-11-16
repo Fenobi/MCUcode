@@ -1,3 +1,0 @@
-".\Objects\main.obj" 
-TO ".\Objects\外部中断" 
-PRINT(".\Listings\外部中断.m51") RAMSIZE(256) 

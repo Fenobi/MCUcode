@@ -1,4 +1,0 @@
-".\Objects\LED_light.obj",
-".\Objects\main.obj" 
-TO ".\Objects\独立按键常按闪烁" 
-PRINT(".\Listings\独立按键常按闪烁.m51") RAMSIZE(256) 

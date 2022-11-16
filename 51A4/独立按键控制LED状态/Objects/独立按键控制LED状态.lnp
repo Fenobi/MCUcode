@@ -1,3 +1,0 @@
-".\Objects\main.obj" 
-TO ".\Objects\独立按键控制LED状态" 
-PRINT(".\Listings\独立按键控制LED状态.m51")

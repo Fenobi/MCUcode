@@ -1,3 +1,0 @@
-".\Objects\main.obj" 
-TO ".\Objects\独立按键控制LED亮暗" 
-PRINT(".\Listings\独立按键控制LED亮暗.m51")
