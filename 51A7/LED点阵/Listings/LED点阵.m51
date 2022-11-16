@@ -1,0 +1,175 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/05/2022  21:13:00  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\LED.obj TO .\Objects\LED点阵 PRINT (.\Listings\LED点阵.m51) RA
+>> MSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\LED.obj (LED)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\LED点阵 (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0040H     UNIT         ?DT?MAIN
+            DATA    0048H     0005H     UNIT         _DATA_GROUP_
+            DATA    004DH     0002H     UNIT         ?DT?_DELAY_N10US?LED
+            IDATA   004FH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     009BH     UNIT         ?PR?_HC595_WRITE_DATA?LED
+            CODE    009EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    012AH     0047H     UNIT         ?C_INITSEG
+            CODE    0171H     0045H     UNIT         ?PR?MAIN?MAIN
+            CODE    01B6H     002FH     UNIT         ?PR?_DELAY_N10US?LED
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\LED点阵 (MAIN)
+
+
+SEGMENT                             DATA_GROUP 
+  +--> CALLED SEGMENT             START    LENGTH
+-------------------------------------------------
+?C_C51STARTUP                     -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                     0048H    0001H
+  +--> ?PR?_HC595_WRITE_DATA?LED
+
+?PR?_HC595_WRITE_DATA?LED         0049H    0004H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\LED点阵 (MAIN)
+
+  VALUE           TYPE          NAME
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/05/2022  21:13:00  PAGE 2
+
+
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00B0H         PUBLIC        P3
+  C:0171H         PUBLIC        main
+  D:0008H         PUBLIC        gled_col
+  D:0028H         PUBLIC        gled_row
+  -------         PROC          MAIN
+  -------         DO            
+  D:0048H         SYMBOL        i
+  -------         ENDDO         
+  C:0171H         LINE#         12
+  C:0171H         LINE#         13
+  C:0171H         LINE#         14
+  C:0174H         LINE#         15
+  C:0174H         LINE#         16
+  C:0174H         LINE#         17
+  C:0182H         LINE#         18
+  C:0182H         LINE#         19
+  C:01A8H         LINE#         20
+  C:01A9H         LINE#         21
+  C:01B2H         LINE#         22
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        LED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00B0H.6       PUBLIC        SRCLK
+  D:00B0H         PUBLIC        P3
+  C:01B6H         PUBLIC        _delay_n10us
+  C:0003H         PUBLIC        _HC595_write_data
+  B:00B0H.5       PUBLIC        rCLK
+  B:00B0H.4       PUBLIC        SER
+  -------         PROC          _DELAY_N10US
+  D:0006H         SYMBOL        n
+  -------         DO            
+  D:004DH         SYMBOL        a
+  D:004EH         SYMBOL        b
+  -------         ENDDO         
+  C:01B6H         LINE#         3
+  C:01B6H         LINE#         4
+  C:01B6H         LINE#         5
+  C:01C0H         LINE#         6
+  C:01C0H         LINE#         8
+  C:01CEH         LINE#         9
+  C:01E4H         LINE#         10
+  C:01E4H         LINE#         12
+  -------         ENDPROC       _DELAY_N10US
+  -------         PROC          _HC595_WRITE_DATA
+  D:0001H         SYMBOL        dat1
+  D:0005H         SYMBOL        dat2
+  D:0003H         SYMBOL        dat3
+  D:004CH         SYMBOL        dat4
+  -------         DO            
+  D:0007H         SYMBOL        i
+  -------         ENDDO         
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/05/2022  21:13:00  PAGE 3
+
+
+  C:0003H         LINE#         14
+  C:0005H         LINE#         15
+  C:0005H         LINE#         16
+  C:0007H         LINE#         17
+  C:0011H         LINE#         18
+  C:0011H         LINE#         19
+  C:001DH         LINE#         20
+  C:0023H         LINE#         21
+  C:0025H         LINE#         22
+  C:0026H         LINE#         23
+  C:0028H         LINE#         24
+  C:0029H         LINE#         26
+  C:002CH         LINE#         27
+  C:0038H         LINE#         28
+  C:0038H         LINE#         29
+  C:0043H         LINE#         30
+  C:0047H         LINE#         31
+  C:0049H         LINE#         32
+  C:004AH         LINE#         33
+  C:004CH         LINE#         34
+  C:004DH         LINE#         36
+  C:0050H         LINE#         37
+  C:005CH         LINE#         38
+  C:005CH         LINE#         39
+  C:0067H         LINE#         40
+  C:006BH         LINE#         41
+  C:006DH         LINE#         42
+  C:006EH         LINE#         43
+  C:0070H         LINE#         44
+  C:0071H         LINE#         46
+  C:0074H         LINE#         47
+  C:0080H         LINE#         48
+  C:0080H         LINE#         49
+  C:008BH         LINE#         50
+  C:008FH         LINE#         51
+  C:0091H         LINE#         52
+  C:0092H         LINE#         53
+  C:0094H         LINE#         54
+  C:0095H         LINE#         56
+  C:0098H         LINE#         57
+  C:009AH         LINE#         58
+  C:009BH         LINE#         59
+  C:009DH         LINE#         61
+  -------         ENDPROC       _HC595_WRITE_DATA
+  -------         ENDMOD        LED
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_N10US?LED
+
+Program Size: data=80.0 xdata=0 code=485
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

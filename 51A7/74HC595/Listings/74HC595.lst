@@ -1,0 +1,86 @@
+C51 COMPILER V9.60.0.0   74HC595                                                           11/05/2022 20:23:45 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE 74HC595
+OBJECT MODULE PLACED IN .\Objects\74HC595.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE 74HC595.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\7
+                    -4HC595.lst) OBJECT(.\Objects\74HC595.obj)
+
+line level    source
+
+   1          #include "74HC595.h"
+   2          
+   3          
+   4          void delay_n10us(u16 n)
+   5          {
+   6   1              while(n--)
+   7   1              {
+   8   2                      unsigned char a,b;
+   9   2                      for(b=1;b>0;b--)
+  10   2                              for(a=2;a>0;a--);
+  11   2              }
+  12   1          
+  13   1      }
+  14          
+  15          void HC595_write_data(u8 dat1,u8 dat2,u8 dat3,u8 dat4)
+  16          {
+  17   1              u8 i=0;
+  18   1              for(i=0;i<8;i++)
+  19   1              {
+  20   2                      SER=dat4>>7;
+  21   2                      dat4<<=1;
+  22   2                      RC=0;
+  23   2                      delay_n10us(1);
+  24   2                      RC=1;
+  25   2                      
+  26   2              }
+  27   1              for(i=0;i<8;i++)
+  28   1              {
+  29   2                      SER=dat3>>7;
+  30   2                      dat3<<=1;
+  31   2                      RC=0;
+  32   2                      delay_n10us(1);
+  33   2                      RC=1;
+  34   2                      
+  35   2              }
+  36   1              for(i=0;i<8;i++)
+  37   1              {
+  38   2                      SER=dat2>>7;
+  39   2                      dat2<<=1;
+  40   2                      RC=0;
+  41   2                      delay_n10us(1);
+  42   2                      RC=1;
+  43   2                      
+  44   2              }
+  45   1              for(i=0;i<8;i++)
+  46   1              {
+  47   2                      SER=dat1>>7;
+  48   2                      dat1<<=1;
+  49   2                      RC=0;
+  50   2                      delay_n10us(1);
+  51   2                      RC=1;
+  52   2                      
+  53   2              }
+  54   1              SC=0;
+C51 COMPILER V9.60.0.0   74HC595                                                           11/05/2022 20:23:45 PAGE 2   
+
+  55   1              delay_n10us(1);
+  56   1              SC=1;
+  57   1              
+  58   1      }
+  59          
+  60          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    206    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

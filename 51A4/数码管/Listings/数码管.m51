@@ -1,0 +1,143 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/04/2022  19:18:32  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\fu.obj TO .\Objects\数码管 PRINT (.\Listings\数码管.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\fu.obj (FU)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\数码管 (FU)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0011H     UNIT         ?DT?FU
+            DATA    0019H     0003H     UNIT         _DATA_GROUP_
+            IDATA   001CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     0074H     UNIT         ?PR?SMG_DISPLAY?FU
+            CODE    0103H     0041H     UNIT         ?PR?_DELAYXMS?FU
+            CODE    0144H     0014H     UNIT         ?C_INITSEG
+            CODE    0158H     0005H     UNIT         ?PR?MAIN?FU
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\数码管 (FU)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?FU
+  +--> ?C_INITSEG
+
+?PR?MAIN?FU                    -----    -----
+  +--> ?PR?SMG_DISPLAY?FU
+
+?PR?SMG_DISPLAY?FU             -----    -----
+  +--> ?PR?_DELAYXMS?FU
+
+?PR?_DELAYXMS?FU               0019H    0003H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\数码管 (FU)
+
+  VALUE           TYPE          NAME
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/04/2022  19:18:32  PAGE 2
+
+
+  ----------------------------------
+
+  -------         MODULE        FU
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:00A0H         PUBLIC        P2
+  D:0008H         PUBLIC        gamg_code
+  C:008FH         PUBLIC        smg_display
+  C:0158H         PUBLIC        main
+  B:00A0H.2       PUBLIC        LSA
+  B:00A0H.3       PUBLIC        LSB
+  B:00A0H.4       PUBLIC        LSC
+  C:0103H         PUBLIC        _delayxms
+  -------         PROC          _DELAYXMS
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0019H         SYMBOL        a
+  D:001AH         SYMBOL        b
+  D:001BH         SYMBOL        c
+  -------         ENDDO         
+  C:0103H         LINE#         17
+  C:0103H         LINE#         18
+  C:0103H         LINE#         19
+  C:010DH         LINE#         20
+  C:010DH         LINE#         22
+  C:011BH         LINE#         23
+  C:0129H         LINE#         24
+  C:0143H         LINE#         25
+  C:0143H         LINE#         26
+  -------         ENDPROC       _DELAYXMS
+  -------         PROC          SMG_DISPLAY
+  -------         DO            
+  D:0005H         SYMBOL        i
+  -------         ENDDO         
+  C:008FH         LINE#         28
+  C:008FH         LINE#         29
+  C:008FH         LINE#         30
+  C:0091H         LINE#         31
+  C:009BH         LINE#         32
+  C:009BH         LINE#         33
+  C:00C0H         LINE#         34
+  C:00C0H         LINE#         35
+  C:00C2H         LINE#         36
+  C:00C4H         LINE#         37
+  C:00C6H         LINE#         38
+  C:00C8H         LINE#         39
+  C:00CAH         LINE#         40
+  C:00CCH         LINE#         41
+  C:00CEH         LINE#         42
+  C:00D0H         LINE#         43
+  C:00D6H         LINE#         44
+  C:00D8H         LINE#         45
+  C:00DEH         LINE#         46
+  C:00E0H         LINE#         47
+  C:00E6H         LINE#         48
+  C:00E8H         LINE#         49
+  C:00EEH         LINE#         50
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/04/2022  19:18:32  PAGE 3
+
+
+  C:00EEH         LINE#         51
+  C:00EEH         LINE#         52
+  C:00F5H         LINE#         53
+  C:00FCH         LINE#         54
+  C:00FFH         LINE#         55
+  C:0102H         LINE#         56
+  -------         ENDPROC       SMG_DISPLAY
+  -------         PROC          MAIN
+  C:0158H         LINE#         58
+  C:0158H         LINE#         59
+  C:0158H         LINE#         60
+  C:0158H         LINE#         61
+  C:0158H         LINE#         62
+  C:015BH         LINE#         63
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        FU
+
+Program Size: data=29.0 xdata=0 code=349
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

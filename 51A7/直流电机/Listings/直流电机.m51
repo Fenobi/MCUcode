@@ -1,0 +1,116 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/06/2022  00:49:59  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj TO .\Objects\直流电机 PRINT (.\Listings\直流电机.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  .\Objects\直流电机 (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     002EH     UNIT         ?PR?DELAY5S?MAIN
+            CODE    0031H     001FH     UNIT         ?PR?DELAY1MS?MAIN
+            CODE    0050H     0014H     UNIT         ?PR?_DELAY_NMS?MAIN
+            CODE    0064H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0070H     0009H     UNIT         ?PR?MAIN?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\直流电机 (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN
+  +--> ?PR?DELAY5S?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\直流电机 (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  C:0031H         PUBLIC        delay1ms
+  C:0070H         PUBLIC        main
+  C:0003H         PUBLIC        delay5s
+  B:0090H.0       PUBLIC        A
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/06/2022  00:49:59  PAGE 2
+
+
+  C:0050H         PUBLIC        _delay_nms
+  -------         PROC          DELAY1MS
+  -------         DO            
+  D:0006H         SYMBOL        a
+  D:0007H         SYMBOL        b
+  -------         ENDDO         
+  C:0031H         LINE#         5
+  C:0031H         LINE#         6
+  C:0031H         LINE#         8
+  C:003DH         LINE#         9
+  C:004FH         LINE#         10
+  -------         ENDPROC       DELAY1MS
+  -------         PROC          _DELAY_NMS
+  D:0004H         SYMBOL        x
+  C:0050H         LINE#         12
+  C:0054H         LINE#         13
+  C:0054H         LINE#         14
+  C:005EH         LINE#         15
+  C:005EH         LINE#         16
+  C:0061H         LINE#         17
+  C:0063H         LINE#         18
+  -------         ENDPROC       _DELAY_NMS
+  -------         PROC          DELAY5S
+  -------         DO            
+  D:0005H         SYMBOL        a
+  D:0006H         SYMBOL        b
+  D:0007H         SYMBOL        c
+  -------         ENDDO         
+  C:0003H         LINE#         20
+  C:0003H         LINE#         21
+  C:0003H         LINE#         23
+  C:000FH         LINE#         24
+  C:001BH         LINE#         25
+  C:0030H         LINE#         26
+  -------         ENDPROC       DELAY5S
+  -------         PROC          MAIN
+  C:0070H         LINE#         28
+  C:0070H         LINE#         29
+  C:0070H         LINE#         30
+  C:0072H         LINE#         31
+  C:0075H         LINE#         32
+  C:0075H         LINE#         33
+  C:0075H         LINE#         34
+  C:0077H         LINE#         35
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_NMS?MAIN
+
+Program Size: data=9.0 xdata=0 code=121
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

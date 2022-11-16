@@ -1,0 +1,56 @@
+C51 COMPILER V9.60.0.0   FU                                                                11/07/2022 17:33:32 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FU
+OBJECT MODULE PLACED IN .\Objects\fu.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE fu.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\fu.lst
+                    -) OBJECT(.\Objects\fu.obj)
+
+line level    source
+
+   1          #include "LED_light.h"
+   2          
+   3          
+   4          
+   5          
+   6          
+   7          
+   8          
+   9          void main()
+  10          {
+  11   1              u8 key=0;
+  12   1              while(1)
+  13   1              {
+  14   2                      key=key_scan(1);
+  15   2                      if(key==KEY1_PRESS)
+  16   2                      {
+  17   3                              LED1=~LED1;
+  18   3                      }
+  19   2                      if(key==KEY2_PRESS)
+  20   2                      {
+  21   3                              LED2=~LED2;
+  22   3                      }
+  23   2                      if(key==KEY3_PRESS)
+  24   2                      {
+  25   3                              LED3=~LED3;
+  26   3                      }
+  27   2                      if(key==KEY4_PRESS)
+  28   2                      {
+  29   3                              LED4=~LED4;
+  30   3                      }
+  31   2              }       
+  32   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     42    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

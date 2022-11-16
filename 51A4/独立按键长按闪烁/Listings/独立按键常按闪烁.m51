@@ -1,0 +1,163 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/07/2022  17:28:48  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\fu.obj TO .\Objects\独立按键常按闪烁 PRINT (.\Listings\独立按键常按闪烁.m51) RAMSI
+>> ZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\fu.obj (FU)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\独立按键常按闪烁 (FU)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0003H     UNIT         _DATA_GROUP_
+            DATA    000BH     0001H     UNIT         ?DT?FU
+            IDATA   000CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     004CH     UNIT         ?PR?_KEY_SCAN?FU
+            CODE    00DBH     0041H     UNIT         ?PR?_DELAY_NMS?FU
+            CODE    011CH     0029H     UNIT         ?PR?MAIN?FU
+            CODE    0145H     0004H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\独立按键常按闪烁 (FU)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?FU
+  +--> ?C_INITSEG
+
+?PR?MAIN?FU                    -----    -----
+  +--> ?PR?_KEY_SCAN?FU
+
+?PR?_KEY_SCAN?FU               -----    -----
+  +--> ?PR?_DELAY_NMS?FU
+
+?PR?_DELAY_NMS?FU              0008H    0003H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\独立按键常按闪烁 (FU)
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/07/2022  17:28:48  PAGE 2
+
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        FU
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A0H.0       PUBLIC        LED1
+  B:00A0H.1       PUBLIC        LED2
+  B:00A0H.2       PUBLIC        LED3
+  B:00A0H.3       PUBLIC        LED4
+  B:00B0H.1       PUBLIC        KEY1
+  B:00B0H.0       PUBLIC        KEY2
+  B:00B0H.2       PUBLIC        KEY3
+  B:00B0H.3       PUBLIC        KEY4
+  C:011CH         PUBLIC        main
+  C:00DBH         PUBLIC        _delay_nms
+  C:008FH         PUBLIC        _key_scan
+  -------         PROC          _DELAY_NMS
+  D:0006H         SYMBOL        n
+  -------         DO            
+  D:0008H         SYMBOL        a
+  D:0009H         SYMBOL        b
+  D:000AH         SYMBOL        c
+  -------         ENDDO         
+  C:00DBH         LINE#         22
+  C:00DBH         LINE#         23
+  C:00DBH         LINE#         24
+  C:00E5H         LINE#         25
+  C:00E5H         LINE#         27
+  C:00F3H         LINE#         28
+  C:0101H         LINE#         29
+  C:011BH         LINE#         30
+  C:011BH         LINE#         31
+  -------         ENDPROC       _DELAY_NMS
+  -------         PROC          _KEY_SCAN
+  D:0007H         SYMBOL        mode
+  -------         DO            
+  D:000BH         SYMBOL        key
+  -------         ENDDO         
+  C:008FH         LINE#         33
+  C:008FH         LINE#         34
+  C:008FH         LINE#         36
+  C:0092H         LINE#         37
+  C:0095H         LINE#         38
+  C:00A7H         LINE#         39
+  C:00A7H         LINE#         40
+  C:00AEH         LINE#         41
+  C:00B1H         LINE#         42
+  C:00B4H         LINE#         43
+  C:00B7H         LINE#         44
+  C:00BAH         LINE#         45
+  C:00BDH         LINE#         46
+  C:00C0H         LINE#         47
+  C:00C3H         LINE#         48
+  C:00C6H         LINE#         49
+  C:00C9H         LINE#         50
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/07/2022  17:28:48  PAGE 3
+
+
+  C:00C9H         LINE#         51
+  C:00D5H         LINE#         52
+  C:00D5H         LINE#         53
+  C:00D8H         LINE#         54
+  C:00D8H         LINE#         55
+  C:00DAH         LINE#         56
+  -------         ENDPROC       _KEY_SCAN
+  -------         PROC          MAIN
+  -------         DO            
+  D:0007H         SYMBOL        key
+  -------         ENDDO         
+  C:011CH         LINE#         58
+  C:011CH         LINE#         59
+  C:011CH         LINE#         60
+  C:011CH         LINE#         61
+  C:011CH         LINE#         62
+  C:011CH         LINE#         63
+  C:0121H         LINE#         64
+  C:0129H         LINE#         65
+  C:0129H         LINE#         66
+  C:012BH         LINE#         67
+  C:012BH         LINE#         68
+  C:0131H         LINE#         69
+  C:0131H         LINE#         70
+  C:0133H         LINE#         71
+  C:0133H         LINE#         72
+  C:0139H         LINE#         73
+  C:0139H         LINE#         74
+  C:013BH         LINE#         75
+  C:013BH         LINE#         76
+  C:0141H         LINE#         77
+  C:0141H         LINE#         78
+  C:0143H         LINE#         79
+  C:0143H         LINE#         80
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        FU
+
+Program Size: data=13.0 xdata=0 code=329
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
