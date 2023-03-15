@@ -1,3 +1,10 @@
+/*** 
+ * @Author: Fenobi 13667739122@qq.com
+ * @Date: 2023-03-14 16:55:49
+ * @LastEditors: Fenobi 13667739122@qq.com
+ * @LastEditTime: 2023-03-16 11:41:00
+ * @FilePath: \EEPROM\App\at24c02\at24c02.h
+ */
 #ifndef _at24c02_H
 #define _at24c02_H
 

@@ -1,3 +1,10 @@
+/***
+ * @Author: Fenobi 13667739122@qq.com
+ * @Date: 2023-03-14 15:43:24
+ * @LastEditors: Fenobi 13667739122@qq.com
+ * @LastEditTime: 2023-03-16 11:41:16
+ * @FilePath: \EEPROM\Public\public.h
+ */
 #ifndef _public_H
 #define _public_H
 
