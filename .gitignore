@@ -7,6 +7,21 @@
 */*/*.uvopt
 */*/*.Kenobi
 */*/*.uvopt
-
+*/*/Debug
+*/*/setting
 
 .vscode
+Objects
+Obj
+Debug
+settings
+
+*.Kenobi
+*.uvopt
+*.log
+
+
+*.dep
+*.ewp
+*.ewt
+*.ewd
