@@ -1,0 +1,320 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    03/10/2023  20:23:51  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\delay.obj, .\Objects\smg.obj TO .\Objects\SMG PRINT (.\Listing
+>> s\SMG.m51) RAMSIZE (256) DISABLEWARNING (16)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\delay.obj (DELAY)
+  .\Objects\smg.obj (SMG)
+  D:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  D:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPDIV)
+  D:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CASTF)
+  D:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?SIDIV)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?LNEG)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\SMG (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0015H     UNIT         ?DT?SMG
+            DATA    001DH     0005H     UNIT         ?DT?_DISPLAY_1_2WEI_XS?SMG
+            DATA    0022H     0005H     UNIT         ?DT?_DISPLAY_2_2WEI_XS?SMG
+            DATA    0027H     0003H     UNIT         ?DT?_DISPLAY_4_WEI?SMG
+            DATA    002AH     0002H     UNIT         ?DT?_DISPLAY_2_WEI?SMG
+            IDATA   002CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     02C0H     UNIT         ?C?LIB_CODE
+            CODE    02C3H     00A0H     UNIT         ?PR?_DISPLAY_2_2WEI_XS?SMG
+            CODE    0363H     008CH     UNIT         ?C_C51STARTUP
+            CODE    03EFH     0086H     UNIT         ?PR?_DISPLAY_1_2WEI_XS?SMG
+            CODE    0475H     0073H     UNIT         ?PR?_DISPLAY_4_WEI?SMG
+            CODE    04E8H     0051H     UNIT         ?PR?_HC138_Y?SMG
+            CODE    0539H     004AH     UNIT         ?PR?MAIN?MAIN
+            CODE    0583H     0027H     UNIT         ?PR?_DISPLAY_2_WEI?SMG
+            CODE    05AAH     0026H     UNIT         ?PR?_DISPLAY_1_WEI?SMG
+            CODE    05D0H     001AH     UNIT         ?C_INITSEG
+            CODE    05EAH     0019H     UNIT         ?PR?_SMG_DISPLAY_DIGITAL?SMG
+            CODE    0603H     0014H     UNIT         ?PR?_DELAY_MS?DELAY
+            CODE    0617H     0008H     UNIT         ?PR?_SMG_DISPLAY_WEI?SMG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\SMG (MAIN)
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/10/2023  20:23:51  PAGE 2
+
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?_DISPLAY_1_WEI?SMG
+
+?PR?_DISPLAY_1_WEI?SMG
+  +--> ?PR?_HC138_Y?SMG
+  +--> ?PR?_SMG_DISPLAY_WEI?SMG
+  +--> ?PR?_SMG_DISPLAY_DIGITAL?SMG
+  +--> ?PR?_DELAY_MS?DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\SMG (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:00E8H         PUBLIC        P6
+  D:00F8H         PUBLIC        P7
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:00D8H         PUBLIC        CCON
+  C:0539H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:0539H         LINE#         5
+  C:0539H         LINE#         6
+  C:0539H         LINE#         7
+  C:0539H         LINE#         8
+  C:0539H         LINE#         11
+  C:0542H         LINE#         12
+  C:054BH         LINE#         13
+  C:0554H         LINE#         14
+  C:055DH         LINE#         15
+  C:0566H         LINE#         16
+  C:056FH         LINE#         17
+  C:0578H         LINE#         18
+  C:0581H         LINE#         33
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/10/2023  20:23:51  PAGE 3
+
+
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:00E8H         PUBLIC        P6
+  D:00F8H         PUBLIC        P7
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:00D8H         PUBLIC        CCON
+  C:0603H         PUBLIC        _Delay_ms
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAY_MS
+  D:0007H         SYMBOL        ms
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0005H         SYMBOL        j
+  -------         ENDDO         
+  C:0603H         LINE#         4
+  C:0603H         LINE#         5
+  C:0603H         LINE#         8
+  C:0609H         LINE#         9
+  C:0609H         LINE#         10
+  C:060AH         LINE#         11
+  C:060BH         LINE#         12
+  C:060CH         LINE#         13
+  C:060EH         LINE#         14
+  C:0610H         LINE#         16
+  C:0610H         LINE#         17
+  C:0612H         LINE#         18
+  C:0614H         LINE#         19
+  C:0616H         LINE#         20
+  -------         ENDPROC       _DELAY_MS
+  -------         ENDMOD        DELAY
+
+  -------         MODULE        SMG
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:00E8H         PUBLIC        P6
+  D:00F8H         PUBLIC        P7
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:0008H         PUBLIC        Display_WEI
+  D:00D8H         PUBLIC        CCON
+  C:0617H         PUBLIC        _SMG_Display_Wei
+  C:03EFH         PUBLIC        _Display_1_2Wei_XS
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/10/2023  20:23:51  PAGE 4
+
+
+  C:02C3H         PUBLIC        _Display_2_2Wei_XS
+  C:05B1H         PUBLIC        _Display_1_WEI
+  C:0583H         PUBLIC        _Display_2_WEI
+  D:0098H         PUBLIC        SCON
+  C:0475H         PUBLIC        _Display_4_WEI
+  D:0088H         PUBLIC        TCON
+  C:05EAH         PUBLIC        _SMG_Display_Digital
+  B:00A0H.5       PUBLIC        HC138_A
+  B:00A0H.6       PUBLIC        HC138_B
+  B:00A0H.7       PUBLIC        HC138_C
+  C:04E8H         PUBLIC        _HC138_Y
+  D:00D0H         PUBLIC        PSW
+  D:0011H         PUBLIC        Display_Digital
+  -------         PROC          _HC138_Y
+  D:0007H         SYMBOL        Yx
+  C:04E8H         LINE#         12
+  C:04E8H         LINE#         13
+  C:04E8H         LINE#         14
+  C:050DH         LINE#         15
+  C:050DH         LINE#         16
+  C:0511H         LINE#         17
+  C:0515H         LINE#         18
+  C:0519H         LINE#         19
+  C:051DH         LINE#         20
+  C:0524H         LINE#         21
+  C:052BH         LINE#         22
+  C:0532H         LINE#         23
+  C:0538H         LINE#         24
+  C:0538H         LINE#         25
+  -------         ENDPROC       _HC138_Y
+  -------         PROC          _SMG_DISPLAY_DIGITAL
+  D:0007H         SYMBOL        num
+  D:0005H         SYMBOL        point
+  C:05EAH         LINE#         30
+  C:05EAH         LINE#         31
+  C:05EAH         LINE#         32
+  C:05F1H         LINE#         33
+  C:05F1H         LINE#         34
+  C:05F9H         LINE#         35
+  C:0602H         LINE#         36
+  C:0602H         LINE#         37
+  -------         ENDPROC       _SMG_DISPLAY_DIGITAL
+  -------         PROC          _SMG_DISPLAY_WEI
+  D:0007H         SYMBOL        wei
+  C:0617H         LINE#         42
+  C:0617H         LINE#         43
+  C:0617H         LINE#         44
+  C:061EH         LINE#         45
+  -------         ENDPROC       _SMG_DISPLAY_WEI
+  -------         PROC          L?0027
+  -------         ENDPROC       L?0027
+  -------         PROC          _DISPLAY_1_WEI
+  D:0006H         SYMBOL        wei
+  D:0005H         SYMBOL        num
+  D:0004H         SYMBOL        point
+  C:05B1H         LINE#         61
+  C:05B5H         LINE#         62
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/10/2023  20:23:51  PAGE 5
+
+
+  C:05B5H         LINE#         63
+  C:05BAH         LINE#         64
+  C:05BFH         LINE#         66
+  C:05C4H         LINE#         67
+  C:05CBH         LINE#         69
+  -------         ENDPROC       _DISPLAY_1_WEI
+  -------         PROC          _DISPLAY_2_WEI
+  D:002AH         SYMBOL        wei
+  D:002BH         SYMBOL        num
+  C:0583H         LINE#         73
+  C:0587H         LINE#         74
+  C:0587H         LINE#         75
+  C:0599H         LINE#         76
+  -------         ENDPROC       _DISPLAY_2_WEI
+  -------         PROC          _DISPLAY_4_WEI
+  D:0027H         SYMBOL        wei
+  D:0028H         SYMBOL        num
+  C:0475H         LINE#         80
+  C:047BH         LINE#         81
+  C:047BH         LINE#         82
+  C:048FH         LINE#         83
+  C:04B2H         LINE#         84
+  C:04CFH         LINE#         85
+  -------         ENDPROC       _DISPLAY_4_WEI
+  -------         PROC          _DISPLAY_1_2WEI_XS
+  D:001DH         SYMBOL        wei
+  D:001EH         SYMBOL        num
+  C:03EFH         LINE#         89
+  C:03F1H         LINE#         90
+  C:03F1H         LINE#         91
+  C:040BH         LINE#         92
+  C:042BH         LINE#         93
+  C:0455H         LINE#         94
+  -------         ENDPROC       _DISPLAY_1_2WEI_XS
+  -------         PROC          _DISPLAY_2_2WEI_XS
+  D:0022H         SYMBOL        wei
+  D:0023H         SYMBOL        num
+  C:02C3H         LINE#         98
+  C:02C5H         LINE#         99
+  C:02C5H         LINE#         100
+  C:02DFH         LINE#         101
+  C:02F5H         LINE#         102
+  C:031FH         LINE#         103
+  C:0343H         LINE#         104
+  -------         ENDPROC       _DISPLAY_2_2WEI_XS
+  -------         ENDMOD        SMG
+
+  -------         MODULE        ?C?FPMUL
+  C:0003H         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FPDIV
+  C:010CH         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+  -------         MODULE        ?C?CASTF
+  C:01A9H         PUBLIC        ?C?CASTF
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/10/2023  20:23:51  PAGE 6
+
+
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?UIDIV
+  C:022AH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?SIDIV
+  C:027FH         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:02B5H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+Program Size: data=45.0 xdata=0 code=1567
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

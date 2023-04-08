@@ -1,0 +1,145 @@
+C51 COMPILER V9.57.0.0   TIME                                                              02/18/2020 19:28:54 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN .\Objects\time.obj
+COMPILER INVOKED BY: E:\keil~5\C51\BIN\C51.EXE time.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\time.
+                    -lst) TABS(2) OBJECT(.\Objects\time.obj)
+
+line level    source
+
+   1          #include"time.h"
+   2          #include "intrins.h"
+   3          unsigned char Write_addr[7] = { 0x8C/*年*/, 0x8A/*周*/, 0x88/*月*/, 0x86/*日*/, 0x84/*小时*/, 0x82/*分*/, 
+             -0x80/*秒*/}; 
+   4          unsigned char Read_addr[7] = { 0x8D/*年*/, 0x8B/*周*/, 0x89/*月*/, 0x87/*日*/, 0x85/*小时*/, 0x83/*分*/, 0
+             -x81/*秒*/}; 
+   5          
+   6          //2019年 周二 一月  21日 上午9点30分0秒
+   7          unsigned char Time[7] = { 0x19, 0x02, 0x01, 0x21, 0x09, 0x30, 0x00};
+   8          unsigned char burst_Time[8] = { 0x01/*分*/, 0x02/*时*/, 0x03/*日*/, 0x04/*月*/, 0x05/*周*/, 0x06/*年*/, 0x
+             -07/**/, 0x00/**/};
+   9          
+  10          void ds1302_wrie(unsigned char da)
+  11          {
+  12   1        unsigned char i;
+  13   1        
+  14   1        for (i=0; i<8; i++)
+  15   1        {
+  16   2          SCLK = 0;
+  17   2          
+  18   2          DA = da & 0x01;
+  19   2          da >>= 1;
+  20   2          
+  21   2          SCLK = 1;
+  22   2        }
+  23   1      }
+  24          
+  25          unsigned char ds1302_read()
+  26          {
+  27   1        unsigned char i,da;
+  28   1        
+  29   1        for (i=0; i<8; i++)
+  30   1        {
+  31   2          SCLK = 0;
+  32   2          
+  33   2          da >>= 1;
+  34   2          if (DA)
+  35   2          {
+  36   3            da |= 0x80;
+  37   3          }
+  38   2          
+  39   2          SCLK = 1;
+  40   2        }
+  41   1        return da;
+  42   1      }
+  43          
+  44          
+  45          void ds1302_write_byte(unsigned char addr,unsigned char da)
+  46          {
+  47   1        RST = 0; _nop_();
+  48   1        SCLK = 0; _nop_();
+  49   1        RST = 1; _nop_();
+  50   1        
+  51   1        ds1302_wrie(addr);
+C51 COMPILER V9.57.0.0   TIME                                                              02/18/2020 19:28:54 PAGE 2   
+
+  52   1        ds1302_wrie(da);
+  53   1        
+  54   1        RST = 0; _nop_();
+  55   1      }
+  56          
+  57          unsigned char ds1302_read_byte(unsigned char addr)
+  58          {
+  59   1        unsigned char temp;
+  60   1        RST = 0; _nop_();
+  61   1        SCLK = 0; _nop_();
+  62   1        RST = 1; _nop_();
+  63   1      
+  64   1        ds1302_wrie(addr);
+  65   1        temp = ds1302_read();
+  66   1        
+  67   1        RST = 0; _nop_();
+  68   1        SCLK = 0; _nop_();
+  69   1        SCLK = 1; _nop_();
+  70   1        DA = 0; _nop_();
+  71   1        DA = 1; _nop_();
+  72   1        
+  73   1        return temp;
+  74   1      }
+  75          
+  76          void Init_DS1302_Time()
+  77          {
+  78   1        unsigned char i;
+  79   1        
+  80   1        for (i=0; i<7; i++)
+  81   1        {
+  82   2          ds1302_write_byte(Write_addr[i],Time[i]);
+  83   2        }
+  84   1        
+  85   1      }
+  86          
+  87          
+  88          void burst_Init_time()
+  89          {
+  90   1        unsigned char i;
+  91   1        
+  92   1        RST = 0; _nop_();
+  93   1        SCLK = 0; _nop_();
+  94   1        RST = 1; _nop_();
+  95   1      
+  96   1        ds1302_wrie(0xBE);
+  97   1      //  ds1302_wrie(0x80);
+  98   1        for (i=0; i<8; i++)
+  99   1        {
+ 100   2          ds1302_wrie(burst_Time[i]);
+ 101   2        }   
+ 102   1        
+ 103   1        RST = 0; _nop_(); 
+ 104   1      }
+ 105          
+ 106          void Read_DS1302_Time()
+ 107          {
+ 108   1        unsigned char i;
+ 109   1        
+ 110   1        for (i=0; i<7; i++)
+ 111   1        {
+ 112   2          Time[i] = ds1302_read_byte(Read_addr[i]);
+ 113   2        }
+C51 COMPILER V9.57.0.0   TIME                                                              02/18/2020 19:28:54 PAGE 3   
+
+ 114   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    169    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     29    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

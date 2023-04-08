@@ -1,0 +1,183 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              02/02/2020 19:03:40 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil~5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.
+                    -lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <intrins.h>
+   3          #include "absacc.h"
+   4          #define somenop {_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_(); _nop_();}
+   5          
+   6          
+   7          sbit TX = P1^0;
+   8          sbit RX = P1^1;
+   9          
+  10          code unsigned char tab[] = { 0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xFF};
+  11          unsigned char dspbuf[8] = {10,10,10,10,10,10,10,10};  //显示缓冲区
+  12          unsigned char dspcom = 0;
+  13          
+  14          bit S_Flag;
+  15          unsigned char mytimer = 0;
+  16          unsigned int t;
+  17          
+  18          unsigned wei = 0x80;
+  19          
+  20          void Display()
+  21          {
+  22   1        unsigned char i;
+  23   1        for (i=0; i<8; i++)  
+  24   1        {
+  25   2          P2 = 0x00;              //选位
+  26   2          P0 = wei>>i;
+  27   2          P2 = 0xC0;
+  28   2          _nop_();_nop_();
+  29   2          P2 = 0x00;
+  30   2      
+  31   2          P0 = tab[dspbuf[i]];
+  32   2          P2 = 0xE0;
+  33   2          _nop_();_nop_();
+  34   2          _nop_();_nop_();
+  35   2          P2 = 0x00;
+  36   2        }
+  37   1      }
+  38          
+  39          void SendWave();
+  40          void display(void);
+  41          
+  42          void main()
+  43          {
+  44   1        unsigned int distance;
+  45   1      
+  46   1        TMOD |= 0x11;  //配置定时器工作模式
+  47   1        TH0 = (65536-2000)/256;
+  48   1        TL0 = (65536-2000)%256;  
+  49   1        TH1 = 0;
+  50   1        TL1 = 0;  
+  51   1        
+  52   1        EA = 1;
+  53   1        ET0 = 1;  //打开定时器0中断
+  54   1        TR0 = 1;  //启动定时器   
+C51 COMPILER V9.57.0.0   MAIN                                                              02/02/2020 19:03:40 PAGE 2   
+
+  55   1        
+  56   1        while(1)
+  57   1        {
+  58   2          if (S_Flag)
+  59   2          {
+  60   3            S_Flag = 0;
+  61   3            SendWave();
+  62   3            TR1 = 1;
+  63   3      //      while((RX == 1) && (TF1 == 1));
+  64   3            while((RX == 1) && (TF1 == 0));
+  65   3            TR1 = 0;
+  66   3          
+  67   3            if (TF1 == 1)
+  68   3            {
+  69   4              TF1 = 0;
+  70   4              distance = 9999;
+  71   4            }
+  72   3            else
+  73   3            {
+  74   4              t = TH1;
+  75   4              t <<= 8;
+  76   4              t |= TL1;
+  77   4              distance = (unsigned int)(t*0.017);
+  78   4            }
+  79   3            TH1 = 0;
+  80   3            TL1 = 0;
+  81   3          }
+  82   2        
+  83   2          dspbuf[2] = distance/100;
+  84   2          dspbuf[1] = distance%100/10;
+  85   2          dspbuf[0] = distance%10; 
+  86   2        }
+  87   1      
+  88   1      //  while(1)
+  89   1      //  {
+  90   1      //        /** 200毫秒更新一次数据 */
+  91   1      //    if(S_Flag)
+  92   1      //    {
+  93   1      //      S_Flag = 0;
+  94   1      //      SendWave();  //发送方波信号
+  95   1      //      TR1 = 1;  //启动计时
+  96   1      //      while((RX == 1) && (TF1 == 0));  //等待收到脉冲
+  97   1      //      TR1 = 0;  //关闭计时
+  98   1      
+  99   1      //      //发生溢出
+ 100   1      //      if(TF1 == 1)
+ 101   1      //      {
+ 102   1      //        TF1 = 0;
+ 103   1      //        distance = 9999;  //无返回
+ 104   1      //      }
+ 105   1      //      else
+ 106   1      //      {
+ 107   1      //        /**  计算时间  */
+ 108   1      //        t = TH1;
+ 109   1      //        t <<= 8;
+ 110   1      //        t |= TL1;
+ 111   1      //        distance = (unsigned int)(t*0.017);  //计算距离     
+ 112   1      //      }
+ 113   1      //        }
+ 114   1      //    /** 数据处理                      */
+ 115   1      //                           
+ 116   1      //  }
+C51 COMPILER V9.57.0.0   MAIN                                                              02/02/2020 19:03:40 PAGE 3   
+
+ 117   1      }
+ 118          void SendWave()
+ 119          {
+ 120   1        unsigned char i=8;
+ 121   1        do
+ 122   1        {
+ 123   2          TX = 1;
+ 124   2          somenop;somenop;somenop;somenop;somenop;somenop;
+ 125   2          somenop;somenop;somenop;somenop;    
+ 126   2          TX = 0;
+ 127   2          somenop;somenop;somenop;somenop;somenop;somenop;
+ 128   2          somenop;somenop;somenop;somenop;    
+ 129   2        }
+ 130   1        while(i--);
+ 131   1      }
+ 132          
+ 133          //void display(void)
+ 134          //{
+ 135          //  XBYTE[0xE000] = 0xff;  //去除鬼影
+ 136          
+ 137          //  XBYTE[0xC000] = (1<<dspcom);
+ 138          //  XBYTE[0xE000] = tab[dspbuf[dspcom]]; 
+ 139          //  
+ 140          //  if(++dspcom == 8){
+ 141          //    dspcom = 0;
+ 142          //  } 
+ 143          //}
+ 144          void Timer() interrupt 1
+ 145          { 
+ 146   1        TH0 = (65536-2000)/256;
+ 147   1        TL0 = (65536-2000)%256;  
+ 148   1        
+ 149   1        Display();
+ 150   1        if(++mytimer == 200)
+ 151   1        {
+ 152   2          S_Flag = 1;
+ 153   2          mytimer = 0;
+ 154   2        }
+ 155   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    482    ----
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     14       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

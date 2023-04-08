@@ -1,0 +1,175 @@
+C51 COMPILER V9.60.0.0   SMG                                                               04/07/2023 18:48:53 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SMG
+OBJECT MODULE PLACED IN .\Objects\smg.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE App\smg\smg.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\pcf8591;.\Public;.\A
+                    -pp\smg;.\App\iic) DEBUG OBJECTEXTEND PRINT(.\Listings\smg.lst) OBJECT(.\Objects\smg.obj)
+
+line level    source
+
+   1          /*
+   2           * @Author: Fenobi 13667739122@qq.com
+   3           * @Date: 2023-03-17 17:16:57
+   4           * @LastEditors: Fenobi 13667739122@qq.com
+   5           * @LastEditTime: 2023-03-17 20:31:14
+   6           * @FilePath: \第八届\App\smg\smg.c
+   7           */
+   8          #include "smg.h" //数码管函数头文件
+   9          
+  10          //*********************************0    1    2    3    4    5    6    7    8    9    .    - c
+  11          unsigned char Display_Digital[13] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90, 0x7f, 0xb
+             -f, 0xc6};
+  12          unsigned char Display_WEI[9] = {0, 1, 2, 4, 8, 16, 32, 64, 128};
+  13          
+  14          // 74hc138芯片驱动函数
+  15          // 例如：HC138_Y(2);  则74hc138芯片的Y2引脚输出低电平，则将或非门Y2C对应的74hc573�
+             -�片输出数据锁存。
+  16          void HC138_Y(u8 Yx)
+  17          {
+  18   1              switch (Yx)
+  19   1              {
+  20   2              case 0:
+  21   2                      HC138_C = 0;
+  22   2                      HC138_B = 0;
+  23   2                      HC138_A = 0;
+  24   2                      break;
+  25   2              case 1:
+  26   2                      HC138_C = 0;
+  27   2                      HC138_B = 0;
+  28   2                      HC138_A = 1;
+  29   2                      break;
+  30   2              case 2:
+  31   2                      HC138_C = 0;
+  32   2                      HC138_B = 1;
+  33   2                      HC138_A = 0;
+  34   2                      break;
+  35   2              case 3:
+  36   2                      HC138_C = 0;
+  37   2                      HC138_B = 1;
+  38   2                      HC138_A = 1;
+  39   2                      break;
+  40   2              case 4:
+  41   2                      HC138_C = 1;
+  42   2                      HC138_B = 0;
+  43   2                      HC138_A = 0;
+  44   2                      break;
+  45   2              case 5:
+  46   2                      HC138_C = 1;
+  47   2                      HC138_B = 0;
+  48   2                      HC138_A = 1;
+  49   2                      break;
+  50   2              case 6:
+  51   2                      HC138_C = 1;
+  52   2                      HC138_B = 1;
+C51 COMPILER V9.60.0.0   SMG                                                               04/07/2023 18:48:53 PAGE 2   
+
+  53   2                      HC138_A = 0;
+  54   2                      break;
+  55   2              case 7:
+  56   2                      HC138_C = 1;
+  57   2                      HC138_B = 1;
+  58   2                      HC138_A = 1;
+  59   2                      break;
+  60   2              }
+  61   1      }
+  62          
+  63          // 数码管显示数字函数(段选)
+  64          // 例如： SMG_Display(2,0);  则数码管显示数字2  没有小数点
+  65          // 例如： SMG_Display(2,1);  则数码管显示数字2. 有小数点
+  66          void SMG_Display_Digital(u8 num, u8 point)
+  67          {
+  68   1              switch (point)
+  69   1              {
+  70   2              case 0:
+  71   2                      SMG_GPIO = Display_Digital[num];
+  72   2                      break;
+  73   2              case 1:
+  74   2                      SMG_GPIO = Display_Digital[num] & 0x7f;
+  75   2                      break;
+  76   2              }
+  77   1      }
+  78          
+  79          // 选择第几位数码管显示函数(位选)
+  80          // 例如： WEI(2); 则八个数码管从左到右第2个数码管可以显示。
+  81          void SMG_Display_Wei(u8 wei)
+  82          {
+  83   1              SMG_GPIO = Display_WEI[wei];
+  84   1      }
+  85          
+  86          /*****************************************
+  87                                                  八位数码管显示驱动思路
+  88          
+  89          ** 数码管显示一位
+  90          **      1.打开对应74hc57跟随输出Y6C，输入位选（选择第几位数码管显示数字）。
+  91          **      2.打开对应74hc57跟随输出Y7C，输入对应断码(写入要显示的数字)。
+  92          **      3.延时一会儿（比如：2ms），这里要选择一个合适的延时时间（时间大了显示�
+             -�闪，太小了显示太暗）
+  93          **
+  94          **      要显示多位依次循环1~4步即可
+  95          *********************************************/
+  96          
+  97          // 数码管指定一位显示一位数字函数
+  98          // 例如：Display_1_WEI(2,3,0);  表示第二位数码管显示3 ，数字3下面没有显示小数点
+  99          // 例如：Display_1_WEI(2,3,1);  表示第二位数码管显示3. ，数字3下面有显示小数点
+ 100          void Display_1_WEI(u8 wei, u8 num, u8 point)
+ 101          {
+ 102   1              HC138_Y(6); // 1
+ 103   1              SMG_Display_Wei(wei);
+ 104   1      
+ 105   1              HC138_Y(7); // 2
+ 106   1              SMG_Display_Digital(num, point);
+ 107   1      
+ 108   1              Delay_ms(2); // 3
+ 109   1      }
+ 110          
+ 111          // 数码管指定从第几位显示两位整数函数
+ 112          void Display_2_WEI(u8 wei, u8 num)
+ 113          {
+C51 COMPILER V9.60.0.0   SMG                                                               04/07/2023 18:48:53 PAGE 3   
+
+ 114   1              Display_1_WEI(wei, num % 100 / 10, 0); // 显示十位
+ 115   1              Display_1_WEI(wei + 1, num % 10, 0);   // 显示个位
+ 116   1      }
+ 117          
+ 118          // 数码管指定从第几位显示四位整数函数
+ 119          void Display_4_WEI(u8 wei, u16 num)
+ 120          {
+ 121   1              Display_1_WEI(wei, num / 1000, 0);                       // 显示千位
+ 122   1              Display_1_WEI(wei + 1, num % 1000 / 100, 0); // 显示百位
+ 123   1              Display_1_WEI(wei + 2, num % 100 / 10, 0);       // 显示十位
+ 124   1              Display_1_WEI(wei + 3, num % 10, 0);             // 显示个位
+ 125   1      }
+ 126          
+ 127          // 显示小于10的两位小数函数
+ 128          void Display_1_2Wei_XS(u8 wei, float num)
+ 129          {
+ 130   1              num = num * 100;                                                                // 将小数扩大100倍
+ 131   1              Display_1_WEI(wei, (int)num % 1000 / 100, 1);   // 显示百位
+ 132   1              Display_1_WEI(wei + 1, (int)num % 100 / 10, 0); // 显示十位
+ 133   1              Display_1_WEI(wei + 2, (int)num % 10, 0);               // 显示个位
+ 134   1      }
+ 135          
+ 136          // 显示小于100的两位小数函数
+ 137          void Display_2_2Wei_XS(u8 wei, float num)
+ 138          {
+ 139   1              num = num * 100;                                                                  // 将小数扩大100倍
+ 140   1              Display_1_WEI(wei, num / 1000, 0);                                // 显示千位
+ 141   1              Display_1_WEI(wei + 1, (int)num % 1000 / 100, 1); // 显示百位
+ 142   1              Display_1_WEI(wei + 2, (int)num % 100 / 10, 0);   // 显示十位
+ 143   1              Display_1_WEI(wei + 3, (int)num % 10, 0);                 // 显示个位
+ 144   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    602    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

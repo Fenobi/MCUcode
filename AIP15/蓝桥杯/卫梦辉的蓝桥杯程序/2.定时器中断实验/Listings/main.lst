@@ -1,0 +1,43 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              12/18/2022 16:56:15 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\MDK5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+   2          #include "delay.h"//延时函数头文件
+   3          #include "TIMERx.h"//定时器函数头文件
+   4          #include "led.h"//led灯函数头文件
+   5          
+   6          void main()
+   7          {
+   8   1        
+   9   1        LED_Init();//LED灯初始化函数（设置锁存器为跟随输出）
+  10   1        
+  11   1        TIM0_Init();//定时器0初始化函数
+  12   1        TIM1_Init();//定时器1初始化函数
+  13   1        TIM2_Init();//定时器2初始化函数
+  14   1        while(1)
+  15   1        {
+  16   2          
+  17   2        }
+  18   1        
+  19   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     14    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
