@@ -1,0 +1,51 @@
+C51 COMPILER V9.60.0.0   SEG                                                               04/04/2023 17:03:11 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SEG
+OBJECT MODULE PLACED IN .\Objects\Seg.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\Driver\Seg.c OPTIMIZE(9,SPEED) BROWSE INCDIR(..\Driver) DEBUG OBJECTE
+                    -XTEND PRINT(.\Listings\Seg.lst) OBJECT(.\Objects\Seg.obj)
+
+line level    source
+
+   1          #include <Seg.h>
+   2          
+   3          unsigned char seg_dula[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90, 0xff, 0xc6, 0x8c};
+   4          unsigned char Seg_Wela[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+   5          
+   6          /* 
+   7                          函数名称：数码管显示函数
+   8                          函数说明：单个数码管显示数字
+   9                          入口参数：wela-需要显示的数码管 dula-需要显示的数字 point-使能小数点
+  10                          返回数据：无
+  11          */
+  12          void Seg_Disp(unsigned char wela,dula,point)
+  13          {
+  14   1              P0 = 0xff;
+  15   1              P2 = P2 & 0x1f | 0xe0;
+  16   1              P2 &= 0x1f;
+  17   1              
+  18   1              P0 = Seg_Wela[wela];
+  19   1              P2 = P2 & 0x1f | 0xc0;
+  20   1              P2 &= 0x1f;     
+  21   1              
+  22   1              P0 = Seg_Dula[dula];
+  23   1              if(point)
+  24   1                      P0 &= 0x7f;
+  25   1              P2 = P2 & 0x1f | 0xe0;
+  26   1              P2 &= 0x1f;     
+  27   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     54    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     21    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

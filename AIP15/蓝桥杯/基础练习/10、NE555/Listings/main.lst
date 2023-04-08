@@ -1,0 +1,172 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              03/02/2020 20:35:27 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil~5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.
+                    -lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.h>
+   2          #include <intrins.h>
+   3          
+   4          //定时器/计数器T0用来计时，定时器/计数器T1用来计数
+   5          //T0为P3^4管脚，T1为P3^5管脚
+   6          
+   7          long int Frequent = 0;
+   8          unsigned char timer1 = 0, timer2 = 0;
+   9          bit Flag = 0;
+  10          unsigned char wei = 0x80;
+  11          
+  12          code unsigned char tab[10] = {0xc0, 0xf9, 0xa4, 0xb0, 
+  13                                          0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
+  14          unsigned char dp[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+  15          unsigned char dpbuff[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+  16          
+  17          void TimerInit(void)    //1毫秒@11.0592MHz
+  18          {
+  19   1        TMOD |= 0x15;   //设置定时器模式
+  20   1        TL0 = 0;    //设置定时初值
+  21   1        TH0 = 0;    //设置定时初值
+  22   1        
+  23   1        TL1 = 0xCD;
+  24   1        TH1 = 0xD4;
+  25   1        
+  26   1        TF0 = 0;    //清除TF0标志
+  27   1        TF1 = 0;
+  28   1        
+  29   1        EA = 1;
+  30   1        ET0 = 1;
+  31   1        ET1 = 1;
+  32   1        
+  33   1        TR0 = 1;    //定时器0开始计时
+  34   1        TR1 = 1;
+  35   1      }
+  36          
+  37          void display()
+  38          {
+  39   1        unsigned char i;
+  40   1        for (i=0; i<8; i++)  
+  41   1        {
+  42   2          P2 = 0x00;              //选位
+  43   2          P0 = wei>>i;
+  44   2          P2 = 0xC0;
+  45   2          _nop_();_nop_();
+  46   2          P2 = 0x00;
+  47   2      
+  48   2          P0 = tab[dp[i]];
+  49   2          P2 = 0xE0;
+  50   2          _nop_();_nop_();
+  51   2          _nop_();_nop_();
+  52   2          _nop_();_nop_();
+  53   2          P2 = 0x00;
+  54   2        }
+C51 COMPILER V9.57.0.0   MAIN                                                              03/02/2020 20:35:27 PAGE 2   
+
+  55   1      }
+  56          
+  57          void Close()
+  58          {
+  59   1        P2 = 0xA0;
+  60   1        P0 = 0x00;
+  61   1        P2 = 0x00;
+  62   1      }
+  63          
+  64          void main()
+  65          {
+  66   1        Close();
+  67   1        TimerInit();
+  68   1        while(1)
+  69   1        {
+  70   2          if (Flag)
+  71   2          {
+  72   3            Flag = 0;
+  73   3            TR0 = 0;
+  74   3            TR1 = 0;
+  75   3          
+  76   3            
+  77   3            Frequent = Frequent + TL0 + TH0*256;
+  78   3            Frequent = Frequent*5;
+  79   3            
+  80   3            dpbuff[7] = Frequent/10000000;
+  81   3            dpbuff[6] = Frequent/1000000%10;
+  82   3            dpbuff[5] = Frequent/100000%10;
+  83   3            dpbuff[4] = Frequent/10000%10;
+  84   3            dpbuff[3] = Frequent/1000%10;
+  85   3            dpbuff[2] = Frequent/100%10;
+  86   3            dpbuff[1] = Frequent/10%10;
+  87   3            dpbuff[0] = Frequent%10;
+  88   3            
+  89   3            dp[7] = dpbuff[7];
+  90   3            dp[6] = dpbuff[6];
+  91   3            dp[5] = dpbuff[5];
+  92   3            dp[4] = dpbuff[4];
+  93   3            dp[3] = dpbuff[3];
+  94   3            dp[2] = dpbuff[2];
+  95   3            dp[1] = dpbuff[1];
+  96   3            dp[0] = dpbuff[0];  
+  97   3            
+  98   3            Frequent = 0;
+  99   3            
+ 100   3            TL0 = 0;
+ 101   3            TH0 = 0;
+ 102   3            
+ 103   3            TL1 = 0xCD;   //设置定时初值
+ 104   3            TH1 = 0xD4;   //设置定时初值
+ 105   3            
+ 106   3            TR0 = 1;
+ 107   3            TR1 = 1;      
+ 108   3          }
+ 109   2          display();
+ 110   2        }
+ 111   1      }
+ 112          
+ 113          
+ 114          void Timer1inter() interrupt 3
+ 115          {
+ 116   1        TL1 = 0xCD;   //设置定时初值
+C51 COMPILER V9.57.0.0   MAIN                                                              03/02/2020 20:35:27 PAGE 3   
+
+ 117   1        TH1 = 0xD4;   //设置定时初值
+ 118   1      
+ 119   1        if (++timer1 == 200)
+ 120   1        {
+ 121   2          timer1 = 0;
+ 122   2          Flag = 1;
+ 123   2        } 
+ 124   1      }
+ 125          
+ 126          void Timer0inter() interrupt 1
+ 127          {
+ 128   1        TL0 = 0;
+ 129   1        TH0 = 0;
+ 130   1        
+ 131   1        Frequent = Frequent + 65536;
+ 132   1      }
+ 133          
+ 134          
+ 135          
+ 136          
+ 137          
+ 138          
+ 139          
+ 140          
+ 141          
+ 142          
+ 143          
+ 144          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    518    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     23    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

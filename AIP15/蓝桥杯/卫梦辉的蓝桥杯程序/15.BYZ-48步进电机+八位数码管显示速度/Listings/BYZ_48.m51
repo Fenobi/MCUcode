@@ -1,0 +1,458 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    12/19/2022  22:48:43  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\MDK5\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\delay.obj, .\Objects\smg.obj, .\Objects\BYZ_48.obj TO .\Objects\B
+>> YZ_48 PRINT (.\Listings\BYZ_48.m51) RAMSIZE (256) DISABLEWARNING (16)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\delay.obj (DELAY)
+  .\Objects\smg.obj (SMG)
+  .\Objects\BYZ_48.obj (BYZ_48)
+  D:\MDK5\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  D:\MDK5\C51\LIB\C51FPS.LIB (?C?FPDIV)
+  D:\MDK5\C51\LIB\C51FPS.LIB (?C?CASTF)
+  D:\MDK5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  D:\MDK5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\MDK5\C51\LIB\C51S.LIB (?C?UIDIV)
+  D:\MDK5\C51\LIB\C51S.LIB (?C?SIDIV)
+  D:\MDK5\C51\LIB\C51S.LIB (?C?LNEG)
+  D:\MDK5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\BYZ_48 (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0015H     UNIT         ?DT?SMG
+            DATA    001DH     0003H     UNIT         ?DT?_DISPLAY_4_WEI?SMG
+            BIT     0020H.0   0000H.1   UNIT         ?BI?_BYZ_48_MOTOR1?BYZ_48
+            BIT     0020H.1   0000H.1   UNIT         _BIT_GROUP_
+                    0020H.2   0000H.6                *** GAP ***
+            DATA    0021H     0005H     UNIT         ?DT?_DISPLAY_1_2WEI_XS?SMG
+            DATA    0026H     0005H     UNIT         ?DT?_DISPLAY_2_2WEI_XS?SMG
+            DATA    002BH     0003H     UNIT         _DATA_GROUP_
+            DATA    002EH     0002H     UNIT         ?DT?_DISPLAY_2_WEI?SMG
+            DATA    0030H     0002H     UNIT         ?DT?_BYZ_48_MOTOR1?BYZ_48
+            IDATA   0032H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     02C0H     UNIT         ?C?LIB_CODE
+            CODE    02C3H     014CH     UNIT         ?PR?_BYZ_48_MOTOR2?BYZ_48
+            CODE    040FH     0106H     UNIT         ?PR?_BYZ_48_MOTOR1?BYZ_48
+            CODE    0515H     00A0H     UNIT         ?PR?_DISPLAY_2_2WEI_XS?SMG
+            CODE    05B5H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0641H     0086H     UNIT         ?PR?_DISPLAY_1_2WEI_XS?SMG
+            CODE    06C7H     0073H     UNIT         ?PR?_DISPLAY_4_WEI?SMG
+            CODE    073AH     0051H     UNIT         ?PR?_HC138_Y?SMG
+            CODE    078BH     002CH     UNIT         ?PR?MAIN?MAIN
+            CODE    07B7H     0027H     UNIT         ?PR?_DISPLAY_2_WEI?SMG
+            CODE    07DEH     0026H     UNIT         ?PR?_DISPLAY_1_WEI?SMG
+            CODE    0804H     001AH     UNIT         ?C_INITSEG
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  12/19/2022  22:48:43  PAGE 2
+
+
+            CODE    081EH     0019H     UNIT         ?PR?_SMG_DISPLAY_DIGITAL?SMG
+            CODE    0837H     0014H     UNIT         ?PR?_DELAY_MS?DELAY
+            CODE    084BH     0008H     UNIT         ?PR?_SMG_DISPLAY_WEI?SMG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\BYZ_48 (MAIN)
+
+
+SEGMENT                                 BIT_GROUP          DATA_GROUP 
+  +--> CALLED SEGMENT                START    LENGTH     START    LENGTH
+------------------------------------------------------------------------
+?C_C51STARTUP                        -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_BYZ_48_MOTOR2?BYZ_48
+  +--> ?PR?_DELAY_MS?DELAY
+
+?PR?_BYZ_48_MOTOR2?BYZ_48            0020H.1  0000H.1    002BH    0003H
+  +--> ?PR?_DELAY_MS?DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\BYZ_48 (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:00E8H         PUBLIC        P6
+  D:00F8H         PUBLIC        P7
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:00D8H         PUBLIC        CCON
+  C:078BH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  B:00A0H.5       PUBLIC        P25
+  B:00A0H.6       PUBLIC        P26
+  B:00A0H.7       PUBLIC        P27
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:078BH         LINE#         7
+  C:078BH         LINE#         8
+  C:078BH         LINE#         9
+  C:0791H         LINE#         10
+  C:0791H         LINE#         11
+  C:0791H         LINE#         17
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  12/19/2022  22:48:43  PAGE 3
+
+
+  C:079EH         LINE#         18
+  C:07A3H         LINE#         19
+  C:07B0H         LINE#         20
+  C:07B5H         LINE#         22
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:00E8H         PUBLIC        P6
+  D:00F8H         PUBLIC        P7
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:00D8H         PUBLIC        CCON
+  C:0837H         PUBLIC        _Delay_ms
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAY_MS
+  D:0007H         SYMBOL        ms
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0005H         SYMBOL        j
+  -------         ENDDO         
+  C:0837H         LINE#         4
+  C:0837H         LINE#         5
+  C:0837H         LINE#         8
+  C:083DH         LINE#         9
+  C:083DH         LINE#         10
+  C:083EH         LINE#         11
+  C:083FH         LINE#         12
+  C:0840H         LINE#         13
+  C:0842H         LINE#         14
+  C:0844H         LINE#         16
+  C:0844H         LINE#         17
+  C:0846H         LINE#         18
+  C:0848H         LINE#         19
+  C:084AH         LINE#         20
+  -------         ENDPROC       _DELAY_MS
+  -------         ENDMOD        DELAY
+
+  -------         MODULE        SMG
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:00E8H         PUBLIC        P6
+  D:00F8H         PUBLIC        P7
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  12/19/2022  22:48:43  PAGE 4
+
+
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:0008H         PUBLIC        Display_WEI
+  D:00D8H         PUBLIC        CCON
+  C:084BH         PUBLIC        _SMG_Display_Wei
+  C:0641H         PUBLIC        _Display_1_2Wei_XS
+  C:0515H         PUBLIC        _Display_2_2Wei_XS
+  C:07E5H         PUBLIC        _Display_1_WEI
+  C:07B7H         PUBLIC        _Display_2_WEI
+  D:0098H         PUBLIC        SCON
+  C:06C7H         PUBLIC        _Display_4_WEI
+  D:0088H         PUBLIC        TCON
+  C:081EH         PUBLIC        _SMG_Display_Digital
+  B:00A0H.5       PUBLIC        HC138_A
+  B:00A0H.6       PUBLIC        HC138_B
+  B:00A0H.7       PUBLIC        HC138_C
+  C:073AH         PUBLIC        _HC138_Y
+  D:00D0H         PUBLIC        PSW
+  D:0011H         PUBLIC        Display_Digital
+  -------         PROC          _HC138_Y
+  D:0007H         SYMBOL        Yx
+  C:073AH         LINE#         12
+  C:073AH         LINE#         13
+  C:073AH         LINE#         14
+  C:075FH         LINE#         15
+  C:075FH         LINE#         16
+  C:0763H         LINE#         17
+  C:0767H         LINE#         18
+  C:076BH         LINE#         19
+  C:076FH         LINE#         20
+  C:0776H         LINE#         21
+  C:077DH         LINE#         22
+  C:0784H         LINE#         23
+  C:078AH         LINE#         24
+  C:078AH         LINE#         25
+  -------         ENDPROC       _HC138_Y
+  -------         PROC          _SMG_DISPLAY_DIGITAL
+  D:0007H         SYMBOL        num
+  D:0005H         SYMBOL        point
+  C:081EH         LINE#         30
+  C:081EH         LINE#         31
+  C:081EH         LINE#         32
+  C:0825H         LINE#         33
+  C:0825H         LINE#         34
+  C:082DH         LINE#         35
+  C:0836H         LINE#         36
+  C:0836H         LINE#         37
+  -------         ENDPROC       _SMG_DISPLAY_DIGITAL
+  -------         PROC          _SMG_DISPLAY_WEI
+  D:0007H         SYMBOL        wei
+  C:084BH         LINE#         42
+  C:084BH         LINE#         43
+  C:084BH         LINE#         44
+  C:0852H         LINE#         45
+  -------         ENDPROC       _SMG_DISPLAY_WEI
+  -------         PROC          L?0027
+  -------         ENDPROC       L?0027
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  12/19/2022  22:48:43  PAGE 5
+
+
+  -------         PROC          _DISPLAY_1_WEI
+  D:0006H         SYMBOL        wei
+  D:0005H         SYMBOL        num
+  D:0004H         SYMBOL        point
+  C:07E5H         LINE#         61
+  C:07E9H         LINE#         62
+  C:07E9H         LINE#         63
+  C:07EEH         LINE#         64
+  C:07F3H         LINE#         66
+  C:07F8H         LINE#         67
+  C:07FFH         LINE#         69
+  -------         ENDPROC       _DISPLAY_1_WEI
+  -------         PROC          _DISPLAY_2_WEI
+  D:002EH         SYMBOL        wei
+  D:002FH         SYMBOL        num
+  C:07B7H         LINE#         73
+  C:07BBH         LINE#         74
+  C:07BBH         LINE#         75
+  C:07CDH         LINE#         76
+  -------         ENDPROC       _DISPLAY_2_WEI
+  -------         PROC          _DISPLAY_4_WEI
+  D:001DH         SYMBOL        wei
+  D:001EH         SYMBOL        num
+  C:06C7H         LINE#         80
+  C:06CDH         LINE#         81
+  C:06CDH         LINE#         82
+  C:06E1H         LINE#         83
+  C:0704H         LINE#         84
+  C:0721H         LINE#         85
+  -------         ENDPROC       _DISPLAY_4_WEI
+  -------         PROC          _DISPLAY_1_2WEI_XS
+  D:0021H         SYMBOL        wei
+  D:0022H         SYMBOL        num
+  C:0641H         LINE#         89
+  C:0643H         LINE#         90
+  C:0643H         LINE#         91
+  C:065DH         LINE#         92
+  C:067DH         LINE#         93
+  C:06A7H         LINE#         94
+  -------         ENDPROC       _DISPLAY_1_2WEI_XS
+  -------         PROC          _DISPLAY_2_2WEI_XS
+  D:0026H         SYMBOL        wei
+  D:0027H         SYMBOL        num
+  C:0515H         LINE#         98
+  C:0517H         LINE#         99
+  C:0517H         LINE#         100
+  C:0531H         LINE#         101
+  C:0547H         LINE#         102
+  C:0571H         LINE#         103
+  C:0595H         LINE#         104
+  -------         ENDPROC       _DISPLAY_2_2WEI_XS
+  -------         ENDMOD        SMG
+
+  -------         MODULE        BYZ_48
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:0080H.0       PUBLIC        STEPA
+  B:0080H.1       PUBLIC        STEPB
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  12/19/2022  22:48:43  PAGE 6
+
+
+  D:0080H         PUBLIC        P0
+  B:0080H.2       PUBLIC        STEPC
+  D:0090H         PUBLIC        P1
+  B:0080H.3       PUBLIC        STEPD
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:00E8H         PUBLIC        P6
+  D:00F8H         PUBLIC        P7
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:00D8H         PUBLIC        CCON
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:040FH         PUBLIC        _BYZ_48_MOTOR1
+  C:02C3H         PUBLIC        _BYZ_48_MOTOR2
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _BYZ_48_MOTOR1
+  D:0030H         SYMBOL        speed
+  B:0020H.0       SYMBOL        FX
+  -------         DO            
+  D:0031H         SYMBOL        i
+  -------         ENDDO         
+  C:040FH         LINE#         12
+  C:0411H         LINE#         13
+  C:0411H         LINE#         15
+  C:0417H         LINE#         16
+  C:0417H         LINE#         17
+  C:042FH         LINE#         18
+  C:042FH         LINE#         19
+  C:0455H         LINE#         20
+  C:0455H         LINE#         21
+  C:0459H         LINE#         22
+  C:0463H         LINE#         23
+  C:0469H         LINE#         24
+  C:0473H         LINE#         25
+  C:0477H         LINE#         26
+  C:047DH         LINE#         27
+  C:0487H         LINE#         28
+  C:048FH         LINE#         29
+  C:048FH         LINE#         30
+  C:0494H         LINE#         31
+  C:0498H         LINE#         32
+  C:0498H         LINE#         33
+  C:049BH         LINE#         34
+  C:049BH         LINE#         35
+  C:04ABH         LINE#         36
+  C:04ABH         LINE#         37
+  C:04D1H         LINE#         38
+  C:04D1H         LINE#         39
+  C:04D5H         LINE#         40
+  C:04DFH         LINE#         41
+  C:04E5H         LINE#         42
+  C:04EFH         LINE#         43
+  C:04F3H         LINE#         44
+  C:04F9H         LINE#         45
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  12/19/2022  22:48:43  PAGE 7
+
+
+  C:0503H         LINE#         46
+  C:050BH         LINE#         47
+  C:050BH         LINE#         48
+  C:0510H         LINE#         49
+  C:0514H         LINE#         50
+  C:0514H         LINE#         51
+  -------         ENDPROC       _BYZ_48_MOTOR1
+  -------         PROC          _BYZ_48_MOTOR2
+  D:0004H         SYMBOL        Angle
+  B:0020H.1       SYMBOL        FX
+  -------         DO            
+  D:002BH         SYMBOL        i
+  D:002CH         SYMBOL        MOTOR_count
+  -------         ENDDO         
+  C:02C3H         LINE#         54
+  C:02C3H         LINE#         55
+  C:02C3H         LINE#         59
+  C:02D5H         LINE#         61
+  C:02DBH         LINE#         62
+  C:02DBH         LINE#         63
+  C:02EBH         LINE#         64
+  C:02EBH         LINE#         65
+  C:0300H         LINE#         66
+  C:0300H         LINE#         67
+  C:0326H         LINE#         68
+  C:0326H         LINE#         69
+  C:032AH         LINE#         70
+  C:0334H         LINE#         71
+  C:033AH         LINE#         72
+  C:0344H         LINE#         73
+  C:0348H         LINE#         74
+  C:034EH         LINE#         75
+  C:0358H         LINE#         76
+  C:0360H         LINE#         77
+  C:0360H         LINE#         78
+  C:0365H         LINE#         79
+  C:0369H         LINE#         80
+  C:0371H         LINE#         81
+  C:0374H         LINE#         82
+  C:0374H         LINE#         83
+  C:037AH         LINE#         84
+  C:037AH         LINE#         85
+  C:038AH         LINE#         86
+  C:038AH         LINE#         87
+  C:039AH         LINE#         88
+  C:039AH         LINE#         89
+  C:03C0H         LINE#         90
+  C:03C0H         LINE#         91
+  C:03C4H         LINE#         92
+  C:03CEH         LINE#         93
+  C:03D4H         LINE#         94
+  C:03DEH         LINE#         95
+  C:03E2H         LINE#         96
+  C:03E8H         LINE#         97
+  C:03F2H         LINE#         98
+  C:03FAH         LINE#         99
+  C:03FAH         LINE#         100
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  12/19/2022  22:48:43  PAGE 8
+
+
+  C:03FFH         LINE#         101
+  C:0403H         LINE#         102
+  C:040BH         LINE#         103
+  C:040EH         LINE#         104
+  C:040EH         LINE#         105
+  -------         ENDPROC       _BYZ_48_MOTOR2
+  -------         ENDMOD        BYZ_48
+
+  -------         MODULE        ?C?FPMUL
+  C:0003H         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FPDIV
+  C:010CH         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+  -------         MODULE        ?C?CASTF
+  C:01A9H         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?UIDIV
+  C:022AH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?SIDIV
+  C:027FH         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:02B5H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+Program Size: data=50.2 xdata=0 code=2131
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,13 @@
+C51 COMPILER V9.60.0.0   DEDAY                                                             04/07/2023 17:25:30 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DEDAY
+OBJECT MODULE PLACED IN .\Objects\deday.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE deday.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\ded
+                    -ay.lst) OBJECT(.\Objects\deday.obj)
+
+line level    source
+
+*** ERROR C318 OF deday.c: can't open file 'deday.c'
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

@@ -1,0 +1,95 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              03/10/2023 20:31:51 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+   2          #include "delay.h"//延时函数头文件
+   3          #include "TIMERx.h"//定时器函数头文件
+   4          #include "led.h"//led灯函数头文件
+   5          #include "smg.h"//数码管函数头文件
+   6          #include "Buzz_Relay.h"//继电器与蜂鸣器函数头文件
+   7          #include "PCF8591.h"//PCF8591芯片A/D D/A转换函数头文件
+   8          
+   9          
+  10          sbit S6=P3^1;//按键
+  11          sbit S7=P3^0;
+  12          sbit L1=P0^0;
+  13          
+  14          
+  15          void main()
+  16          {
+  17   1              char mode=0;
+  18   1              unsigned char ADC;
+  19   1              
+  20   1              RELAY(0);//关闭继电器和蜂鸣器
+  21   1              TIM0_Init();//定时器0初始化函数
+  22   1      
+  23   1              while(1)
+  24   1              {
+  25   2                      if(S7==0)//开始出水
+  26   2                      {
+  27   3                              mode= 0;
+  28   3                              TR0 = 1;                //使能定时器0中断
+  29   3                              Water_L=0;
+  30   3                              RELAY(1);//打开继电器
+  31   3                      }
+  32   2                      if(S6==0)//暂停出水
+  33   2                      {
+  34   3                              mode= 1;
+  35   3                              TR0 = 0;                //使能定时器0中断
+  36   3                              RELAY(0);//关闭继电器
+  37   3                      }
+  38   2                      
+  39   2                      switch(mode)
+  40   2                      {
+  41   3                              case 0://模式零显示升
+  42   3                                      Display_water(Water_L);//显示升程序     
+  43   3                              if(Water_L>=99.99)
+  44   3                              {
+  45   4                                      mode=1;
+  46   4                                      RELAY(0);//关闭继电器
+  47   4                              }
+  48   3                              break;
+  49   3                              case 1://模式一显示价格
+  50   3                                      Display_water(Water_L*0.5);//计算并显示金额程序 
+  51   3                              break;
+  52   3                      }
+  53   2                      
+  54   2                      ADC = PCF8591_Read(AIN1);//返回PCF8591芯片ADC转换值
+C51 COMPILER V9.60.0.0   MAIN                                                              03/10/2023 20:31:51 PAGE 2   
+
+  55   2                      if(ADC<64)
+  56   2                      {
+  57   3                              P25=0;P27=1;P26=0;//打开Y4C锁存器                       使用这个程序效果完全不一样,   P27=1;P26=0;P25=0;
+  58   3                              L1=0;
+  59   3                              P27=0;P26=0;P25=0;
+  60   3                      }
+  61   2                      else
+  62   2                      {
+  63   3                              P25=0;P27=1;P26=0;//打开Y4C锁存器                       使用这个程序效果完全不一样,   P27=1;P26=0;P25=0;
+  64   3                              L1=1;
+  65   3                              P27=0;P26=0;P25=0;
+  66   3                      }
+  67   2                      
+  68   2              }
+  69   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    164    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
