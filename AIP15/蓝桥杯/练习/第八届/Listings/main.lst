@@ -1,0 +1,304 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2023 15:22:43 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE User\main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\ds18b20;.\App\ds1302;.
+                    -\App\EEPROM;.\App\iic;.\App\key;.\App\smg;.\Public;.\App\BEED_JDQ) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) OBJECT(
+                    -.\Objects\main.obj)
+
+line level    source
+
+   1          #include "ds1302.h"
+   2          #include "smg.h"
+   3          #include "ds18b20.h"
+   4          #include "iic.h"
+   5          #include "key.h"
+   6          #include "Buzz_Relay.h"
+   7          
+   8          u8 falg = 1;
+   9          u8 i = 0;
+  10          u8 is_on;
+  11          u8 time_buf_cpy[8];
+  12          
+  13          void tm0_isr() interrupt 1
+  14          {
+  15   1              ++i;
+  16   1              if (i == 20)
+  17   1              {
+  18   2                      i = 0;
+  19   2                      is_on = ~is_on;
+  20   2              }
+  21   1      }
+  22          
+  23          void Timer0Init(void) // 50毫秒@12.000MHz
+  24          {
+  25   1      
+  26   1              AUXR &= 0x7F; // 定时器时钟12T模式
+  27   1              TMOD &= 0xF0; // 设置定时器模式
+  28   1              TL0 = 0xB0;       // 设置定时初始值
+  29   1              TH0 = 0x3C;       // 设置定时初始值
+  30   1              TF0 = 0;          // 清除TF0标志
+  31   1              TR0 = 1;          // 定时器0开始计时
+  32   1      }
+  33          
+  34          void time_display(u8 time_buf[8])
+  35          {
+  36   1              while(1)
+  37   1              {
+  38   2                      ds1302_read_time();
+  39   2                      time_buf[0] = gDS1302_TIME[2] / 16;
+  40   2                      time_buf[1] = gDS1302_TIME[2] % 16;
+  41   2                      time_buf[2] = 0x40;
+  42   2                      time_buf[3] = gDS1302_TIME[1] / 16;
+  43   2                      time_buf[4] = gDS1302_TIME[1] % 16;
+  44   2                      time_buf[5] = 0x40;
+  45   2                      time_buf[6] = gDS1302_TIME[0] / 16;
+  46   2                      time_buf[7] = gDS1302_TIME[0] % 16;
+  47   2      
+  48   2                      Display_2_WEI(1, time_buf[0] * 10 + time_buf[1]);
+  49   2                      Display_1_WEI(3, 11, 0);
+  50   2                      Display_2_WEI(4, time_buf[3] * 10 + time_buf[4]);
+  51   2                      Display_1_WEI(6, 11, 0);
+  52   2                      Display_2_WEI(7, time_buf[6] * 10 + time_buf[7]);
+  53   2                      if(key_scan(0))
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2023 15:22:43 PAGE 2   
+
+  54   2                      {
+  55   3                              break;
+  56   3                      }
+  57   2              }
+  58   1      }
+  59          
+  60          void clock_reg(u8 num,u8 time_buf_cpy[])
+  61          {
+  62   1              switch (num)
+  63   1              {
+  64   2              case 2:
+  65   2                      ++time_buf_cpy[num];
+  66   2                      break;
+  67   2              case 3:
+  68   2                      --time_buf_cpy[num];
+  69   2                      break;
+  70   2              }
+  71   1      }
+  72          
+  73          
+  74          void clock(u8 time_buf[8],u8 n)
+  75          {
+  76   1              u8 i = 0;
+  77   1              u8 key_temp;
+  78   1              
+  79   1              for (i = 0; i < 8; ++i)
+  80   1              {
+  81   2                      time_buf_cpy[i] = time_buf[i];
+  82   2              }
+  83   1              while(1)
+  84   1              {
+  85   2                      key_temp = key_scan(0);
+  86   2                      Display_2_WEI(1, time_buf_cpy[0] * 10 + time_buf_cpy[1]);
+  87   2                      Display_1_WEI(3, 11, 0);
+  88   2                      Display_2_WEI(4, time_buf_cpy[3] * 10 + time_buf_cpy[4]);
+  89   2                      Display_1_WEI(6, 11, 0);
+  90   2                      Display_2_WEI(7, time_buf_cpy[6] * 10 + time_buf_cpy[7]);
+  91   2                      while(is_on)
+  92   2                      {
+  93   3                              key_temp = key_scan(0);
+  94   3                              if(n==0)
+  95   3                              {
+  96   4                                      Display_2_WEI(1, time_buf_cpy[0] * 10 + time_buf_cpy[1]);
+  97   4                                      Display_1_WEI(3, 11, 0);
+  98   4                                      Display_2_WEI(4, time_buf_cpy[3] * 10 + time_buf_cpy[4]);
+  99   4                                      Display_1_WEI(6, 11, 0);
+ 100   4                                      // Display_2_WEI(7, time_buf_cpy[6] * 10 + time_buf_cpy[7]);
+ 101   4                              }
+ 102   3                              else if(n==1)
+ 103   3                              {
+ 104   4                                      Display_2_WEI(1, time_buf_cpy[0] * 10 + time_buf_cpy[1]);
+ 105   4                                      Display_1_WEI(3, 11, 0);
+ 106   4                                      //Display_2_WEI(4, time_buf_cpy[3] * 10 + time_buf_cpy[4]);
+ 107   4                                      Display_1_WEI(6, 11, 0);
+ 108   4                                      Display_2_WEI(7, time_buf_cpy[6] * 10 + time_buf_cpy[7]);
+ 109   4                              }
+ 110   3                              else if(n==2)
+ 111   3                              {
+ 112   4                                      //Display_2_WEI(1, time_buf_cpy[0] * 10 + time_buf_cpy[1]);
+ 113   4                                      Display_1_WEI(3, 11, 0);
+ 114   4                                      Display_2_WEI(4, time_buf_cpy[3] * 10 + time_buf_cpy[4]);
+ 115   4                                      Display_1_WEI(6, 11, 0);
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2023 15:22:43 PAGE 3   
+
+ 116   4                                      Display_2_WEI(7, time_buf_cpy[6] * 10 + time_buf_cpy[7]);
+ 117   4                              }
+ 118   3      
+ 119   3                              if (key_temp == 4)
+ 120   3                              {
+ 121   4                                      falg = 0;
+ 122   4                                      break;
+ 123   4                              }
+ 124   3                              else if (key_temp == 2 || key_temp == 3)
+ 125   3                              {
+ 126   4      
+ 127   4                                      if (key_temp == 2)
+ 128   4                                      {
+ 129   5                                              switch (n)
+ 130   5                                              {
+ 131   6                                              case 0:
+ 132   6                                                      ++time_buf_cpy[7];
+ 133   6                                                      break;
+ 134   6                                              case 1:
+ 135   6                                                      ++time_buf_cpy[4];
+ 136   6                                                      break;
+ 137   6                                              case 2:
+ 138   6                                                      ++time_buf_cpy[1];
+ 139   6                                                      break;
+ 140   6                                              }
+ 141   5                                              
+ 142   5                                      }
+ 143   4                                      if (key_temp == 3)
+ 144   4                                      {
+ 145   5                                              switch (n)
+ 146   5                                              {
+ 147   6                                              case 0:
+ 148   6                                                      --time_buf_cpy[7];
+ 149   6                                                      break;
+ 150   6                                              case 1:
+ 151   6                                                      --time_buf_cpy[4];
+ 152   6                                                      break;
+ 153   6                                              case 2:
+ 154   6                                                      --time_buf_cpy[1];
+ 155   6                                                      break;
+ 156   6                                              }
+ 157   5                                      }
+ 158   4                              }
+ 159   3                              
+ 160   3                              
+ 161   3                      }
+ 162   2      
+ 163   2                      if (key_temp == 4)
+ 164   2                      {
+ 165   3                              falg = 0;
+ 166   3                              break;
+ 167   3                      }
+ 168   2                      else if (key_temp == 2 || key_temp == 3)
+ 169   2                      {
+ 170   3      
+ 171   3                              if (key_temp == 2)
+ 172   3                              {
+ 173   4                                      switch (n)
+ 174   4                                      {
+ 175   5                                      case 0:
+ 176   5                                              ++time_buf_cpy[7];
+ 177   5                                              break;
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2023 15:22:43 PAGE 4   
+
+ 178   5                                      case 1:
+ 179   5                                              ++time_buf_cpy[4];
+ 180   5                                              break;
+ 181   5                                      case 2:
+ 182   5                                              ++time_buf_cpy[1];
+ 183   5                                              break;
+ 184   5                                      }
+ 185   4                              }
+ 186   3                              if (key_temp == 3)
+ 187   3                              {
+ 188   4                                      switch (n)
+ 189   4                                      {
+ 190   5                                      case 0:
+ 191   5                                              --time_buf_cpy[7];
+ 192   5                                              break;
+ 193   5                                      case 1:
+ 194   5                                              --time_buf_cpy[4];
+ 195   5                                              break;
+ 196   5                                      case 2:
+ 197   5                                              --time_buf_cpy[1];
+ 198   5                                              break;
+ 199   5                                      }
+ 200   4                              }
+ 201   3                      }
+ 202   2                      else if(key_temp==1)
+ 203   2                      {
+ 204   3                              if(n==2)
+ 205   3                                      n = -1;
+ 206   3                              clock(time_buf_cpy, ++n);
+*** WARNING C265 IN LINE 206 OF User\main.c: '_clock': recursive call to non-reentrant function
+ 207   3                      }
+ 208   2              }
+ 209   1      }
+ 210          
+ 211          void FMQ(void)
+ 212          {
+ 213   1              HC138_A = 1;
+ 214   1              HC138_B = 0;
+ 215   1              HC138_C = 1;
+ 216   1              //FMQ_temp = 1;
+ 217   1      }
+ 218          
+ 219          int main()
+ 220          {
+ 221   1              u8 time_buf[8];
+ 222   1              u8 key_temp = key_scan(0);
+ 223   1              u8 t = 0,q=0;
+ 224   1              i = 0;
+ 225   1      
+ 226   1              BUZZ(0);
+ 227   1              RELAY(0);
+ 228   1              
+ 229   1              ET0 = 1;
+ 230   1              EA = 1;
+ 231   1              Timer0Init();
+ 232   1              
+ 233   1              ds1302_init();
+ 234   1              ds1302_read_time();
+ 235   1              while (1)
+ 236   1              {
+ 237   2                       for (t = 0; t < 8;++t)
+ 238   2                       {
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2023 15:22:43 PAGE 5   
+
+ 239   3                              if(time_buf[t]!=time_buf_cpy[t])
+ 240   3                                      break;
+ 241   3                              else
+ 242   3                              {
+ 243   4                                      ++q;
+ 244   4                                      if(q==8)
+ 245   4                                      {
+ 246   5                                              BUZZ(1);
+ 247   5                                      }
+ 248   4                                              
+ 249   4                              }
+ 250   3                       }
+ 251   2                      key_temp = key_scan(0);
+ 252   2                      if (KEY4 == 0)
+ 253   2                      {
+ 254   3                              // while (!key_scan(0))
+ 255   3                              Display_2_2Wei_XS(5, ds18b20_read_temperture());
+ 256   3                      }
+ 257   2                      if (KEY1 == 0 && falg)
+ 258   2                      {
+ 259   3                              clock(time_buf,0);
+ 260   3                              falg = 1;
+ 261   3                      }
+ 262   2                      else
+ 263   2                      {
+ 264   3                              time_display(time_buf);
+ 265   3                              BUZZ(0);
+ 266   3                      }
+ 267   2                      
+ 268   2              }
+ 269   1      
+ 270   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    924    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11      22
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

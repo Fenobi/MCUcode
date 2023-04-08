@@ -1,0 +1,124 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              01/15/2020 15:44:58 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil~5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.
+                    -lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<STC15F2K60S2.h>
+   2          #include<intrins.h>
+   3          //利用数码管来显示按下的键的键值
+   4          
+   5          //
+   6          unsigned char data_pros[10] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
+   7          
+   8          void delay()  //delay  @ 11.0592M
+   9          {
+  10   1        unsigned char i, j, k;
+  11   1      
+  12   1        _nop_();
+  13   1        _nop_();
+  14   1        i = 1;
+  15   1        j = 5;
+  16   1        k = 5;
+  17   1        do
+  18   1        {
+  19   2          do
+  20   2          {
+  21   3            while (--k);
+  22   3          } while (--j);
+  23   2        } while (--i);
+  24   1      }   
+  25          
+  26          int read_key()
+  27          {
+  28   1        int col = 0;
+  29   1        int key_value = 0;
+  30   1        int key_press = 0; //消抖处理
+  31   1        
+  32   1        //检测列，得出col值
+  33   1        P3 = 0xF0;
+  34   1        P42 = 1;
+  35   1        P44 = 1;
+  36   1        if ((P3 != 0xF0) || (P42 == 0) || (P44 == 0))
+  37   1        {
+  38   2          delay();    //消抖  
+  39   2          if ((P3 != 0xF0) || (P42 == 0) || (P44 == 0))
+  40   2          {
+  41   3            if ((P3&0x10) == 0)   col = 4;
+  42   3            if ((P3&0x20) == 0)   col = 3;
+  43   3            if (P42 == 0)   col = 2;
+  44   3            if (P44 == 0)   col = 1;
+  45   3          }
+  46   2        } 
+  47   1        //检测行，得出key_value，return key_value，如果不成功则返回0
+  48   1        P3 = 0x0F;
+  49   1        P44 = 0;
+  50   1        P42 = 0;
+  51   1        if (col != 0)
+  52   1        {
+  53   2          if ((P3&0x01) == 0)   key_value = col + 0;
+  54   2          if ((P3&0x02) == 0)   key_value = col + 4;
+C51 COMPILER V9.57.0.0   MAIN                                                              01/15/2020 15:44:58 PAGE 2   
+
+  55   2          if ((P3&0x04) == 0)   key_value = col + 8;
+  56   2          if ((P3&0x08) == 0)   key_value = col + 12;
+  57   2          
+  58   2          P2 = 0x00;
+  59   2          return key_value;
+  60   2        }
+  61   1        P2 = 0x00;
+  62   1        return 0;
+  63   1      }
+  64          
+  65          //数码管函数
+  66          void display(int value)
+  67          {
+  68   1        int i = 0;
+  69   1        int temp1,temp2;
+  70   1        temp1 = value/10;
+  71   1        temp2 = value%10;
+  72   1        
+  73   1              P2 = 0xC0;
+  74   1              P0 = 0x80;
+  75   1              //显示数字
+  76   1              P2 = 0xE0;
+  77   1              P0 = 0xff;
+  78   1              P0 = data_pros[temp2];
+  79   1              delay();
+  80   1              P2 = 0x00;
+  81   1              //显示十位
+  82   1              P2 = 0xC0;
+  83   1              P0 = 0x40;
+  84   1              //显示数字
+  85   1              P2 = 0xE0;
+  86   1              P0 = data_pros[temp1];
+  87   1              delay();
+  88   1      }
+  89          
+  90          void main()
+  91          {
+  92   1        int value = 0;
+  93   1        while(1)
+  94   1        {
+  95   2          value = read_key();
+  96   2          display(value);
+  97   2        }
+  98   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    259    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

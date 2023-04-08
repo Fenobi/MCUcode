@@ -1,0 +1,39 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              12/18/2022 22:10:05 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\MDK5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+   2          #include "delay.h"//延时函数头文件
+   3          #include "smg.h"//数码管函数头文件
+   4          #include "CX20106A.h"//超声波函数头文件
+   5          
+   6          void main()
+   7          {
+   8   1        u8 JL;
+   9   1        CSB_Init();//超声波定时器初始化
+  10   1        while(1)
+  11   1        {
+  12   2          JL=Get_Distance();
+  13   2          Display_2_WEI(1,JL);
+  14   2        }
+  15   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     17    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

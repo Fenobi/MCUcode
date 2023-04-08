@@ -1,0 +1,210 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              02/18/2020 19:28:54 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil~5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.
+                    -lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<STC15F2K60S2.h>
+   2          #include<intrins.h>
+   3          #include"time.h"
+   4          
+   5          bit key = 0;
+   6          sbit k1 = P3^0;
+   7          unsigned char data_pros[10] = {0xc0, 0xf9, 0xa4, 0xb0, 
+   8                                          0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
+   9          void Delay3us()   //@11.0592MHz
+  10          {
+  11   1        unsigned char i, j, k;
+  12   1      
+  13   1        _nop_();
+  14   1        _nop_();
+  15   1        i = 1;
+  16   1        j = 5;
+  17   1        k = 5;
+  18   1        do
+  19   1        {
+  20   2          do
+  21   2          {
+  22   3            while (--k);
+  23   3          } while (--j);
+  24   2        } while (--i);
+  25   1      }
+  26          
+  27          void Close_Buzz()
+  28          {
+  29   1        P2 = 0xA0;
+  30   1        P0 = 0x00;
+  31   1        P2 = 0x00;
+  32   1      }
+  33          
+  34          void display(unsigned char dat[7])
+  35          {
+  36   1        unsigned char i;
+  37   1        int temp = 0;;
+  38   1        if (key == 1)
+  39   1        {
+  40   2          for (i=0; i<8; i++)
+  41   2          {
+  42   3            switch (i)
+  43   3            {
+  44   4              case 0:
+  45   4                P2 = 0xC0;
+  46   4                P0 = 0x01;
+  47   4                break;
+  48   4              case 1:
+  49   4                P2 = 0xC0;
+  50   4                P0 = 0x02;
+  51   4                break;
+  52   4              case 2: 
+  53   4                P2 = 0xC0;
+  54   4                P0 = 0x04;
+C51 COMPILER V9.57.0.0   MAIN                                                              02/18/2020 19:28:54 PAGE 2   
+
+  55   4                break;
+  56   4              case 3:
+  57   4                P2 = 0xC0;
+  58   4                P0 = 0x08;
+  59   4                break;
+  60   4              case 4:
+  61   4                P2 = 0xC0;
+  62   4                P0 = 0x10;
+  63   4                break;
+  64   4              case 5:
+  65   4                P2 = 0xC0;
+  66   4                P0 = 0x20;          
+  67   4                break;
+  68   4              case 6: 
+  69   4                P2 = 0xC0;
+  70   4                P0 = 0x40;  
+  71   4                break;
+  72   4              case 7: 
+  73   4                P2 = 0xC0;
+  74   4                P0 = 0x80;
+  75   4                break;
+  76   4              default:
+  77   4                break;
+  78   4            }
+  79   3            switch (i)
+  80   3            {
+  81   4              case 0: P2 = 0xE0;P0 = data_pros[dat[0]/16];break;
+  82   4              case 1: P2 = 0xE0;P0 = data_pros[dat[0]%16];break;
+  83   4              case 2: P2 = 0xE0;P0 = data_pros[dat[2]/16];break;
+  84   4              case 3: P2 = 0xE0;P0 = data_pros[dat[2]%16];break;
+  85   4              case 4: P2 = 0xE0;P0 = data_pros[dat[3]/16];break;
+  86   4              case 5: P2 = 0xE0;P0 = data_pros[dat[3]%16];break;
+  87   4              case 6: P2 = 0xE0;P0 = 0xBF;  break;
+  88   4              case 7: P2 = 0xE0;P0 = data_pros[dat[1]];break;
+  89   4              default:
+  90   4                break;
+  91   4            }
+  92   3            Delay3us();
+  93   3            P0 = 0xFF;
+  94   3            
+  95   3          }
+  96   2        }
+  97   1        else 
+  98   1        {
+  99   2          for (i=0; i<8; i++)
+ 100   2          {
+ 101   3            switch (i)
+ 102   3            {
+ 103   4              case 0:
+ 104   4                P2 = 0xC0;
+ 105   4                P0 = 0x01;
+ 106   4                break;
+ 107   4              case 1:
+ 108   4                P2 = 0xC0;
+ 109   4                P0 = 0x02;
+ 110   4                break;
+ 111   4              case 2: 
+ 112   4                P2 = 0xC0;
+ 113   4                P0 = 0x04;
+ 114   4                break;
+ 115   4              case 3:
+ 116   4                P2 = 0xC0;
+C51 COMPILER V9.57.0.0   MAIN                                                              02/18/2020 19:28:54 PAGE 3   
+
+ 117   4                P0 = 0x08;
+ 118   4                break;
+ 119   4              case 4:
+ 120   4                P2 = 0xC0;
+ 121   4                P0 = 0x10;
+ 122   4                break;
+ 123   4              case 5:
+ 124   4                P2 = 0xC0;
+ 125   4                P0 = 0x20;          
+ 126   4                break;
+ 127   4              case 6: 
+ 128   4                P2 = 0xC0;
+ 129   4                P0 = 0x40;  
+ 130   4                break;
+ 131   4              case 7: 
+ 132   4                P2 = 0xC0;
+ 133   4                P0 = 0x80;
+ 134   4                break;
+ 135   4              default:
+ 136   4                break;
+ 137   4            }
+ 138   3            switch (i)
+ 139   3            {
+ 140   4              case 0: P2 = 0xE0;P0 = 0xBF;break;
+ 141   4              case 1: P2 = 0xE0;P0 = 0xBF;break;
+ 142   4              case 2: P2 = 0xE0;P0 = data_pros[dat[4]/16];break;
+ 143   4              case 3: P2 = 0xE0;P0 = data_pros[dat[4]%16];break;
+ 144   4              case 4: P2 = 0xE0;P0 = data_pros[dat[5]/16];break;
+ 145   4              case 5: P2 = 0xE0;P0 = data_pros[dat[5]%16];break;
+ 146   4              case 6: P2 = 0xE0;P0 = data_pros[dat[6]/16];break;
+ 147   4              case 7: P2 = 0xE0;P0 = data_pros[dat[6]%16];break;
+ 148   4              default:
+ 149   4                break;
+ 150   4            }
+ 151   3            Delay3us();
+ 152   3            P0 = 0xFF;
+ 153   3          }
+ 154   2        }
+ 155   1      }
+ 156          
+ 157          
+ 158          
+ 159          void main()
+ 160          {
+ 161   1        Close_Buzz();
+ 162   1        burst_Init_time();
+ 163   1        
+ 164   1        EX0 = 1;
+ 165   1        IT0 = 1;
+ 166   1        EA = 1;
+ 167   1        
+ 168   1        
+ 169   1        while(1)
+ 170   1        {
+ 171   2          Read_DS1302_Time();
+ 172   2          display(Time);
+ 173   2        }
+ 174   1      }
+ 175          
+ 176          void key_press() interrupt 0
+ 177          {
+ 178   1        key = ~key;
+C51 COMPILER V9.57.0.0   MAIN                                                              02/18/2020 19:28:54 PAGE 4   
+
+ 179   1      }
+ 180            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    530    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

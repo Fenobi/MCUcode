@@ -1,0 +1,111 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2023 18:48:54 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE User\main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\pcf8591;.\Public;.\App
+                    -\smg;.\App\iic) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "smg.h"
+   2          #include "pcf8591.h"
+   3          
+   4          float VOL=0;
+   5          u8 gsmg_code[8]=0;
+   6          u8 flag=0;
+   7          u8 time=0;
+   8          
+   9          void Timer0_Isr(void) interrupt 1
+  10          {
+  11   1              
+  12   1      }
+  13          
+  14          void Timer0_Init(void)          //50毫秒@12.000MHz
+  15          {
+  16   1              AUXR &= 0x7F;                   //定时器时钟12T模式
+  17   1              TMOD &= 0xF0;                   //设置定时器模式
+  18   1              TL0 = 0xB0;                             //设置定时初始值
+  19   1              TH0 = 0x3C;                             //设置定时初始值
+  20   1              TF0 = 0;                                //清除TF0标志
+  21   1              TR0 = 1;                                //定时器0开始计时
+  22   1              ET0 = 1;                                //使能定时器0中断
+  23   1      }
+  24          
+  25          void Timer1_Isr(void) interrupt 3
+  26          {
+  27   1      }
+  28          
+  29          void Timer1_Init(void)          //50毫秒@12.000MHz
+  30          {
+  31   1              AUXR &= 0xBF;                   //定时器时钟12T模式
+  32   1              TMOD &= 0x0F;                   //设置定时器模式
+  33   1              TL1 = 0xB0;                             //设置定时初始值
+  34   1              TH1 = 0x3C;                             //设置定时初始值
+  35   1              TF1 = 0;                                //清除TF1标志
+  36   1              TR1 = 1;                                //定时器1开始计时
+  37   1              ET1 = 1;                                //使能定时器1中断
+  38   1              EA = 1;
+  39   1      }
+  40          
+  41          
+  42          void vol_display()
+  43          {
+  44   1              u8 dat;
+  45   1              dat=AD_read(0x43);//读电压
+  46   1              //AD_write(dat);
+  47   1              VOL=dat/51.0;
+  48   1              gsmg_code[0]=(u8)VOL;
+  49   1              gsmg_code[1]=(u16)(VOL*100)/10%10;
+  50   1              gsmg_code[2]=(u16)(VOL*100)%10;
+  51   1      
+  52   1              HC138_Y(6); 
+  53   1              SMG_Display_Wei(1);
+  54   1              HC138_Y(7); 
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2023 18:48:54 PAGE 2   
+
+  55   1              SMG_GPIO=0xc1;
+  56   1              Delay_ms(2); 
+  57   1      
+  58   1              HC138_Y(6); 
+  59   1              SMG_Display_Wei(6);
+  60   1              HC138_Y(7); 
+  61   1              SMG_Display_Digital(gsmg_code[0], 1);
+  62   1              Delay_ms(2); 
+  63   1              
+  64   1              HC138_Y(6); 
+  65   1              SMG_Display_Wei(7);
+  66   1              HC138_Y(7); 
+  67   1              SMG_Display_Digital(gsmg_code[1], 0);
+  68   1              Delay_ms(2); 
+  69   1              
+  70   1              HC138_Y(6); 
+  71   1              SMG_Display_Wei(8);
+  72   1              HC138_Y(7); 
+  73   1              SMG_Display_Digital(gsmg_code[2], 0);
+  74   1              Delay_ms(2); 
+  75   1      }
+  76          
+  77          
+  78          void main()
+  79          {       
+  80   1              while(1)
+  81   1              {               
+  82   2                      vol_display();
+  83   2                              
+  84   2              }               
+  85   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    247    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     14    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,136 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              04/05/2023 15:36:22 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\pcf8591;.\Public;.\App\smg;
+                    -.\App\iic;..\µÚÊ®Ò»½ì) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "pcf8591.h"
+   2          #include "e2prom.h"
+   3          #include "smg.h"
+   4          #include "key.h"
+   5          
+   6          
+   7          u8 smg_display[8];
+   8          float VOL;
+   9          float VOL_set=0.0;
+  10          u8 u_flag = 1;
+  11          u8 p_flag = 0;
+  12          u8 n_flag = 0;
+  13          u8 t=1;
+  14          
+  15          void n_display()
+  16          {
+  17   1              
+  18   1      }
+  19          
+  20          void u_display()
+  21          {
+  22   1              u8 num;
+  23   1              
+  24   1              num = AD_read(0x43);
+  25   1              VOL = num / 51.0;
+  26   1              smg_display[5] = (u8)(VOL) % 10;
+  27   1              smg_display[6] = (u16)(VOL * 100) / 10 % 10;
+  28   1              smg_display[7] = (u16)(VOL * 100) % 10;
+  29   1      
+  30   1              display_wei(1);
+  31   1              HC_138(7);
+  32   1              P0 = 0xc1;
+  33   1              Delay_ms(2);
+  34   1              display_wei(6);
+  35   1              display_1num(smg_display[5], 1);
+  36   1              display_wei(7);
+  37   1              display_1num(smg_display[6], 0);
+  38   1              display_wei(8);
+  39   1              display_1num(smg_display[7], 0);
+  40   1              
+  41   1      }
+  42          
+  43          void p_display()
+  44          {
+  45   1              u8 butten,key_up,key_old,key_down,key_slow_down;
+  46   1              if(key_slow_down) return ;
+  47   1              
+  48   1              smg_display[5] = (u8)(VOL_set) % 10;
+  49   1              smg_display[6] = (u16)(VOL_set * 100) / 10 % 10;
+  50   1              smg_display[7] = (u16)(VOL_set * 100) % 10;
+  51   1      
+  52   1              display_wei(1);
+  53   1              HC_138(7);
+  54   1              P0 = 0x8c;
+C51 COMPILER V9.60.0.0   MAIN                                                              04/05/2023 15:36:22 PAGE 2   
+
+  55   1              Delay_ms(2);
+  56   1              display_wei(6);
+  57   1              display_1num(smg_display[5], 1);
+  58   1              display_wei(7);
+  59   1              display_1num(smg_display[6], 0);
+  60   1              display_wei(8);
+  61   1              display_1num(smg_display[7], 0);
+  62   1              butten=Key_KBD_Read(0);
+  63   1              key_up=butten&(butten^key_old);
+  64   1              key_down=~butten&(butten^key_old);
+  65   1              key_old=butten;
+  66   1              if (butten == 16)
+  67   1              {
+  68   2                      VOL_set += 0.5;
+  69   2                      
+  70   2                      if(VOL_set>5.0)
+  71   2                      {
+  72   3                              VOL_set = 0.0;
+  73   3                      }
+  74   2              }
+  75   1              else if(butten == 17)
+  76   1              {
+  77   2                      VOL_set -= 0.5;
+  78   2                      if (VOL_set < 0.0)
+  79   2                      {
+  80   3                              VOL_set = 5.0;
+  81   3                      }
+  82   2              }
+  83   1              
+  84   1      }
+  85          
+  86          void main()
+  87          {
+  88   1              u8 butten;
+  89   1              while(1)
+  90   1              {
+  91   2                      butten=Key_KBD_Read(0);
+  92   2                      if(butten==12)
+  93   2                      {
+  94   3                              ++t;
+  95   3                              if(t>4)
+  96   3                              {
+  97   4                                      t=1;
+  98   4                              }
+  99   3                      }
+ 100   2                      if(t==1)
+ 101   2                              u_display();
+ 102   2                      else if(t==2)
+ 103   2                              p_display();
+ 104   2                      else if(t==3)
+ 105   2                              ;
+ 106   2              }
+ 107   1              
+ 108   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    488    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     20       5
+C51 COMPILER V9.60.0.0   MAIN                                                              04/05/2023 15:36:22 PAGE 3   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

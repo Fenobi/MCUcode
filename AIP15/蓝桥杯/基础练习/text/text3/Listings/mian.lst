@@ -1,0 +1,72 @@
+C51 COMPILER V9.57.0.0   MIAN                                                              03/19/2020 13:55:23 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MIAN
+OBJECT MODULE PLACED IN .\Objects\mian.obj
+COMPILER INVOKED BY: E:\keil~5\C51\BIN\C51.EXE mian.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\mian.
+                    -lst) TABS(2) OBJECT(.\Objects\mian.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.h>
+   2          #include <DS1302.h>
+   3          unsigned char tab[] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+   4          void Delay1ms()   //@11.0592MHz
+   5          {
+   6   1        unsigned char i, j;
+   7   1        i = 11;
+   8   1        j = 190;
+   9   1        do
+  10   1        {
+  11   2          while (--j);
+  12   2        } while (--i);
+  13   1      }
+  14          
+  15          
+  16          void DS(unsigned char yi,unsigned char er)
+  17          {
+  18   1        P2 = 0xC0;
+  19   1        P0 = 0x40;
+  20   1        P2 = 0xE0;
+  21   1        P0 = tab[yi];
+  22   1        Delay1ms();
+  23   1        P2 = 0x00;
+  24   1        
+  25   1        P2 = 0xC0;
+  26   1        P0 = 0x80;
+  27   1        P2 = 0xE0;
+  28   1        P0 = tab[er];
+  29   1        Delay1ms();
+  30   1        P2 = 0x00;  
+  31   1      }
+  32          
+  33          void main()
+  34          {
+  35   1        unsigned char temp,yi,er;
+  36   1        P2 = 0xA0; P0 = 0x00; P2 = 0x00;
+  37   1        Init_Time();
+  38   1        while(1)
+  39   1        {
+  40   2          temp = Read_DS(0x81);
+  41   2          yi = temp>>4;
+  42   2          er = temp&0x0F;
+  43   2          DS(yi,er);
+  44   2        } 
+  45   1      }
+  46          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     88    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10    ----
+C51 COMPILER V9.57.0.0   MIAN                                                              03/19/2020 13:55:23 PAGE 2   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

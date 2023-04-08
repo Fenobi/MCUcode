@@ -1,0 +1,139 @@
+C51 COMPILER V9.60.0.0   TIME                                                              03/10/2023 20:18:06 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN .\Objects\time.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE time.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\time
+                    -.lst) OBJECT(.\Objects\time.obj)
+
+line level    source
+
+   1          #include "time.h"//DS1302函数头文件
+   2          
+   3          
+   4          //以下为DS1302芯片的写和读 年、月、周、日、时、分、秒 的地址
+   5          unsigned char Write_addr[7] = { 0x8C/*年*/, 0x8A/*周*/, 0x88/*月*/, 0x86/*日*/, 0x84/*小时*/, 0x82/*分*/, 
+             -0x80/*秒*/}; 
+   6          unsigned char Read_addr[7] = { 0x8D/*年*/, 0x8B/*周*/, 0x89/*月*/, 0x87/*日*/, 0x85/*小时*/, 0x83/*分*/, 0
+             -x81/*秒*/}; 
+   7          
+   8          
+   9          //以下数组Time[7]是初始化设置和刷新日期时间的储存数组
+  10          //2022年 周一 12月  19日 上午12点07分30秒
+  11          //************************年****周****月****日****时****分****秒*/
+  12          unsigned char Time[7] = {0x22, 0x01, 0x12, 0x19, 0x01, 0x17, 0x50};
+  13          
+  14          
+  15          
+  16          
+  17          //向DS1302写入一个字节数据函数
+  18          void ds1302_wrie(unsigned char da)
+  19          {
+  20   1              unsigned char i;
+  21   1              
+  22   1              for (i=0; i<8; i++)
+  23   1              {
+  24   2                      SCLK = 0;
+  25   2                      
+  26   2                      DA = da & 0x01;
+  27   2                      da >>= 1;
+  28   2                      
+  29   2                      SCLK = 1;
+  30   2              }
+  31   1      }
+  32          
+  33          //向DS1302读出一个字节数据函数
+  34          unsigned char ds1302_read()
+  35          {
+  36   1              unsigned char i,da;
+  37   1              
+  38   1              for (i=0; i<8; i++)
+  39   1              {
+  40   2                      SCLK = 0;
+  41   2                      
+  42   2                      da >>= 1;
+  43   2                      if (DA)
+  44   2                      {
+  45   3                              da |= 0x80;
+  46   3                      }
+  47   2                      
+  48   2                      SCLK = 1;
+  49   2              }
+  50   1              return da;
+  51   1      }
+  52          
+C51 COMPILER V9.60.0.0   TIME                                                              03/10/2023 20:18:06 PAGE 2   
+
+  53          //向DS1302的指定地址写入一个字节数据函数
+  54          void ds1302_write_byte(unsigned char addr,unsigned char da)
+  55          {
+  56   1              RST = 0; _nop_();
+  57   1              SCLK = 0; _nop_();
+  58   1              RST = 1; _nop_();
+  59   1              
+  60   1              ds1302_wrie(addr);
+  61   1              ds1302_wrie(da);
+  62   1              
+  63   1              RST = 0; _nop_();
+  64   1      }
+  65          
+  66          //向DS1302的指定地址读出一个字节数据函数（函数返回数据）
+  67          unsigned char ds1302_read_byte(unsigned char addr)
+  68          {
+  69   1              unsigned char temp;
+  70   1              RST = 0; _nop_();
+  71   1              SCLK = 0; _nop_();
+  72   1              RST = 1; _nop_();
+  73   1      
+  74   1              ds1302_wrie(addr);
+  75   1              temp = ds1302_read();
+  76   1              
+  77   1              RST = 0; _nop_();
+  78   1              SCLK = 0; _nop_();
+  79   1              SCLK = 1; _nop_();
+  80   1              DA = 0; _nop_();
+  81   1              DA = 1; _nop_();
+  82   1              
+  83   1              return temp;
+  84   1      }
+  85          
+  86          //初始化设置DS1302芯片时间函数（把数组Time[7]中的时间数据写入DS1302芯片）
+  87          void Init_DS1302_Time()
+  88          {
+  89   1              unsigned char i;
+  90   1              ds1302_write_byte(0x8E,0x00);            //禁止写保护，就是关闭写保护功能
+  91   1              for (i=0; i<7; i++)
+  92   1              {
+  93   2                      ds1302_write_byte(Write_addr[i],Time[i]);
+  94   2              }
+  95   1              ds1302_write_byte(0x8E,0x80);            //打开写保护功能
+  96   1      }
+  97          
+  98          
+  99          //读取DS1302芯片时间函数（把DS1302芯片的时间数据写入数组Time[7]中）
+ 100          void Read_DS1302_Time()
+ 101          {
+ 102   1              unsigned char i;
+ 103   1              
+ 104   1              for (i=0; i<7; i++)
+ 105   1              {
+ 106   2                      Time[i] = ds1302_read_byte(Read_addr[i]);
+ 107   2              }
+ 108   1      }
+ 109          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    185    ----
+   CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.60.0.0   TIME                                                              03/10/2023 20:18:06 PAGE 3   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     21    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

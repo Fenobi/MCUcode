@@ -1,0 +1,225 @@
+C51 COMPILER V9.54   MAIN                                                                  02/20/2023 11:35:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Driver) DEBUG OBJECTEXTEND PRI
+                    -NT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /* 头文件声明区 */
+   2          #include <STC15F2K60S2.H>//单片机寄存器专用头文件
+   3          #include <Init.h>//初始化底层驱动专用头文件
+   4          #include <Led.h>//Led底层驱动专用头文件
+   5          #include <Key.h>//按键底层驱动专用头文件
+   6          #include <Seg.h>//数码管底层驱动专用头文件
+   7          #include "onewire.h"//温度底层驱动专用头文件
+   8          #include "ds1302.h"//时钟底层驱动专用头文件
+   9          
+  10          /* 变量声明区 */
+  11          unsigned char Key_Val,Key_Down,Key_Old,Key_Up;//按键专用变量
+  12          unsigned char Key_Slow_Down;//按键减速专用变量
+  13          unsigned char Seg_Buf[8] = {10,10,10,10,10,10,10,10};//数码管显示数据存放数组
+  14          unsigned char Seg_Point[8] = {0,0,0,0,0,0,0,0};//数码管小数点数据存放数组
+  15          unsigned char Seg_Pos;//数码管扫描专用变量
+  16          unsigned int Seg_Slow_Down;//数码管减速专用变量
+  17          unsigned char ucLed[8] = {0,0,0,0,0,0,0,0};//Led显示数据存放数组
+  18          unsigned char Seg_Disp_Mode;//数码管显示模式变量 0-温度显示 1-时间显示 2-参数设置
+  19          unsigned char ucRtc[3] = {0x23,0x59,0x55};//系统时钟数据储存数组
+  20          unsigned char Temperature_Parameter_Disp = 23;//温度参数显示值
+  21          unsigned char Temperature_Parameter_Ctrol = 23;//温度参数控制值
+  22          unsigned char Timer_100Ms;//一百毫秒计时变量
+  23          float Temperature;//实时温度变量
+  24          bit Time_Flag;//时钟显示标志位 0-显示小时分钟 1-显示分钟秒钟
+  25          bit Relay_Work_Mode;//继电器工作模式变量 0-温度控制 1-时钟控制
+  26          bit Relay_Enable_Flag;//继电器使能标志位 0-不使能 1-使能
+  27          bit Hour_Flag;//系统整点标志位
+  28          bit Led_Star_Flag;//Led闪烁标志位
+  29          
+  30          /* 键盘处理函数 */
+  31          void Key_Proc()
+  32          {
+  33   1        if(Key_Slow_Down) return;
+  34   1        Key_Slow_Down = 1;//键盘减速程序
+  35   1      
+  36   1        Key_Val = Key_Read();//实时读取键码值
+  37   1        Key_Down = Key_Val & (Key_Old ^ Key_Val);//捕捉按键下降沿
+  38   1        Key_Up = ~Key_Val & (Key_Old ^ Key_Val);//捕捉按键上降沿
+  39   1        Key_Old = Key_Val;//辅助扫描变量
+  40   1        
+  41   1        if(Seg_Disp_Mode == 1) //处于时钟显示模式
+  42   1        {
+  43   2          if(Key_Old == 17) //长按按键S17
+  44   2            Time_Flag = 1;//显示分钟秒钟
+  45   2          else
+  46   2            Time_Flag = 0;//显示小时分钟
+  47   2        }
+  48   1        
+  49   1        switch(Key_Down)
+  50   1        {
+  51   2          case 12://切换按键
+  52   2            if(++Seg_Disp_Mode == 3) //循环切换数码管显示模式
+  53   2            {
+  54   3              Seg_Disp_Mode = 0;//返回温度显示界面
+C51 COMPILER V9.54   MAIN                                                                  02/20/2023 11:35:30 PAGE 2   
+
+  55   3              Temperature_Parameter_Ctrol = Temperature_Parameter_Disp;//设置参数生效
+  56   3            }
+  57   2          break;
+  58   2          case 16://自加按键
+  59   2            if(Seg_Disp_Mode == 2) //处于参数设置模式
+  60   2            {
+  61   3              if(++Temperature_Parameter_Disp == 100) //限制上限
+  62   3                Temperature_Parameter_Disp = 99;
+  63   3            }
+  64   2          break;
+  65   2          case 17://自减按键
+  66   2            if(Seg_Disp_Mode == 2) //处于参数设置模式
+  67   2            {
+  68   3              if(--Temperature_Parameter_Disp == 9) //限制下限
+  69   3                Temperature_Parameter_Disp = 10;
+  70   3            }
+  71   2          break;
+  72   2          case 13://切换按键
+  73   2            Relay_Work_Mode ^= 1;//切换继电器工作模式
+  74   2          break;
+  75   2        }
+  76   1      }
+  77          
+  78          /* 信息处理函数 */
+  79          void Seg_Proc()
+  80          {
+  81   1        if(Seg_Slow_Down) return;
+  82   1        Seg_Slow_Down = 1;//数码管减速程序
+  83   1        
+  84   1        /* 信息读取区域 */
+  85   1        Temperature = rd_temperature();//实时读取温度值
+  86   1        Read_Rtc(ucRtc);//实时读取时钟数据
+  87   1        
+  88   1        /* 数据显示区域 */
+  89   1        Seg_Buf[0] = 11;//统一标识符 U
+  90   1        Seg_Buf[1] = Seg_Disp_Mode + 1;//界面编号
+  91   1        switch(Seg_Disp_Mode)
+  92   1        {
+  93   2          case 0://温度显示
+  94   2            Seg_Point[6] = 1;//使能小数点
+  95   2            Seg_Buf[5] = (unsigned char)Temperature / 10 % 10;
+  96   2            Seg_Buf[6] = (unsigned char)Temperature % 10;
+  97   2            Seg_Buf[7] = (unsigned int)(Temperature * 10) % 10;
+  98   2          break;
+  99   2          case 1://时间显示
+ 100   2            Seg_Point[6] = 0;//熄灭小数点
+ 101   2            Seg_Buf[3] = ucRtc[0 + (unsigned char)Time_Flag] / 16;
+ 102   2            Seg_Buf[4] = ucRtc[0 + (unsigned char)Time_Flag] % 16;
+ 103   2            Seg_Buf[5] = 12;//标识符 -
+ 104   2            Seg_Buf[6] = ucRtc[1 + (unsigned char)Time_Flag] / 16;
+ 105   2            Seg_Buf[7] = ucRtc[1 + (unsigned char)Time_Flag] % 16;      
+ 106   2          break;
+ 107   2          case 2://参数设置
+ 108   2            Seg_Buf[3] = Seg_Buf[4] = Seg_Buf[5] = 10;//熄灭数码管
+ 109   2            Seg_Buf[6] = Temperature_Parameter_Disp / 10;
+ 110   2            Seg_Buf[7] = Temperature_Parameter_Disp % 10;
+ 111   2          break;
+ 112   2        }
+ 113   1      }
+ 114          
+ 115          /* 其他显示函数 */
+ 116          void Led_Proc()
+C51 COMPILER V9.54   MAIN                                                                  02/20/2023 11:35:30 PAGE 3   
+
+ 117          {
+ 118   1        if(ucRtc[1] == 0 && ucRtc[2] == 0) //系统达到整点
+ 119   1          Hour_Flag = 1;
+ 120   1        if(ucRtc[2] == 0x05)
+ 121   1          Hour_Flag = 0;
+ 122   1        
+ 123   1        /* Led显示区域 */
+ 124   1        ucLed[0] = Hour_Flag;
+ 125   1        ucLed[1] = !Relay_Work_Mode;
+ 126   1        ucLed[2] = Led_Star_Flag?Relay_Enable_Flag:0;
+ 127   1        
+ 128   1        /* 继电器使能区域 */
+ 129   1        if(Relay_Work_Mode == 0) //处于温度控制模式
+ 130   1          Relay_Enable_Flag = (unsigned char)Temperature / Temperature_Parameter_Ctrol;
+ 131   1        else //处于时钟控制模式
+ 132   1          Relay_Enable_Flag = Hour_Flag;
+ 133   1      }
+ 134          
+ 135          /* 定时器0中断初始化函数 */
+ 136          void Timer0Init(void)   //1毫秒@12.000MHz
+ 137          {
+ 138   1        AUXR &= 0x7F;   //定时器时钟12T模式
+ 139   1        TMOD &= 0xF0;   //设置定时器模式
+ 140   1        TL0 = 0x18;   //设置定时初始值
+ 141   1        TH0 = 0xFC;   //设置定时初始值
+ 142   1        TF0 = 0;    //清除TF0标志
+ 143   1        TR0 = 1;    //定时器0开始计时
+ 144   1        ET0 = 1;    //定时器中断0打开
+ 145   1        EA = 1;     //总中断打开
+ 146   1      }
+ 147          
+ 148          /* 定时器0中断服务函数 */
+ 149          void Timer0Server() interrupt 1
+ 150          {  
+ 151   1        if(++Key_Slow_Down == 10) Key_Slow_Down = 0;//键盘减速专用
+ 152   1        if(++Seg_Slow_Down == 500) Seg_Slow_Down = 0;//数码管减速专用
+ 153   1        if(++Seg_Pos == 8) Seg_Pos = 0;//数码管显示专用
+ 154   1        Seg_Disp(Seg_Pos,Seg_Buf[Seg_Pos],Seg_Point[Seg_Pos]);
+ 155   1        Led_Disp(Seg_Pos,ucLed[Seg_Pos]);
+ 156   1        Relay(Relay_Enable_Flag);
+ 157   1        if(++Timer_100Ms == 100)
+ 158   1        {
+ 159   2          Timer_100Ms = 0;
+ 160   2          Led_Star_Flag ^= 1;
+ 161   2        }
+ 162   1      }
+ 163          
+ 164          /* 延时函数 */
+ 165          void Delay750ms()   //@12.000MHz
+ 166          {
+ 167   1        unsigned char i, j, k;
+ 168   1        i = 35;
+ 169   1        j = 51;
+ 170   1        k = 182;
+ 171   1        do
+ 172   1        {
+ 173   2          do
+ 174   2          {
+ 175   3            while (--k);
+ 176   3          } while (--j);
+ 177   2        } while (--i);
+ 178   1      }
+C51 COMPILER V9.54   MAIN                                                                  02/20/2023 11:35:30 PAGE 4   
+
+ 179          
+ 180          
+ 181          /* Main */
+ 182          void main()
+ 183          {
+ 184   1        rd_temperature();//上电读取一次温度
+ 185   1        Delay750ms();//延时750毫秒避免显示错误数据
+ 186   1        Set_Rtc(ucRtc);//上电设置时钟数据
+ 187   1        System_Init();
+ 188   1        Timer0Init();
+ 189   1        while (1)
+ 190   1        {
+ 191   2          Key_Proc();
+ 192   2          Seg_Proc();
+ 193   2          Led_Proc();
+ 194   2        }
+ 195   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    610    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     43    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      5    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

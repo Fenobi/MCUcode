@@ -1,0 +1,60 @@
+C51 COMPILER V9.60.0.0   PCF8591                                                           04/07/2023 18:48:53 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE PCF8591
+OBJECT MODULE PLACED IN .\Objects\pcf8591.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE App\pcf8591\pcf8591.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\pcf8591;.\Pu
+                    -blic;.\App\smg;.\App\iic) DEBUG OBJECTEXTEND PRINT(.\Listings\pcf8591.lst) OBJECT(.\Objects\pcf8591.obj)
+
+line level    source
+
+   1          #include "pcf8591.h"
+   2          #include "iic.h"
+   3          
+   4          u8 AD_read(u8 addr)
+   5          {
+   6   1              u8 temp;
+   7   1              
+   8   1              IIC_Start();
+   9   1              IIC_SendByte(0x90);//读
+  10   1              IIC_WaitAck();
+  11   1              IIC_SendByte(addr);
+  12   1              IIC_WaitAck();
+  13   1              
+  14   1              IIC_Start();
+  15   1              IIC_SendByte(0x91);//写
+  16   1              IIC_WaitAck();
+  17   1              temp = IIC_RecByte();
+  18   1              IIC_SendAck(1);
+  19   1              IIC_Stop();
+  20   1              
+  21   1              return temp;
+  22   1      }
+  23          
+  24          void AD_write(u8 dat)
+  25          {
+  26   1              IIC_Start();
+  27   1              IIC_SendByte(0x90);//读
+  28   1              IIC_WaitAck();
+  29   1              IIC_SendByte(0x41);//使能
+  30   1              IIC_WaitAck();
+  31   1              
+  32   1              IIC_SendByte(dat);
+  33   1              IIC_WaitAck();
+  34   1      
+  35   1              IIC_Stop();
+  36   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     80    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

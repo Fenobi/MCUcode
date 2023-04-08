@@ -1,0 +1,87 @@
+C51 COMPILER V9.60.0.0   EEPROM                                                            03/18/2023 15:19:24 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE EEPROM
+OBJECT MODULE PLACED IN .\Objects\EEPROM.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE App\EEPROM\EEPROM.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\ds18b20;.\App\
+                    -ds1302;.\App\EEPROM;.\App\iic;.\App\key;.\App\smg;.\Public;.\App\BEED_JDQ) DEBUG OBJECTEXTEND PRINT(.\Listings\EEPROM.ls
+                    -t) OBJECT(.\Objects\EEPROM.obj)
+
+line level    source
+
+   1          /*
+   2           * @Author: Fenobi 13667739122@qq.com
+   3           * @Date: 2023-03-17 17:17:12
+   4           * @LastEditors: Fenobi 13667739122@qq.com
+   5           * @LastEditTime: 2023-03-18 12:08:31
+   6           * @FilePath: \第八届\App\EEPROM\EEPROM.c
+   7           */
+   8          #include "EEPROM.h"
+   9          /******************
+  10          **1.MCU先发送一个开始信号(START)启动总线
+  11          **2.接着跟上首字节，发送器件写操作地址(DEVICE ADDRESS)+写数据(0xA0)
+  12          **3.等待应答信号(ACK)
+  13          **4.发送数据的存储地址。24C02一共有256个字节的存储空间，地址从0x00~0xFF，想把�
+             -��据存储>在哪个位置，此刻写的就是哪个地址。
+  14          **5.发送要存储的数据第一字节、第二字节、…注意在写数据的过程中，E2PROM每个
+             -字节都会>回应一个“应答位0”，老告诉我们写E2PROM数据成功，如果没有回应答位，说明写�
+             -��不成功。
+  15          **6.发送结束信号（STOP）停止总线
+  16          *************************************************************************************************
+  17          **说明：AT24C02 EEPROM芯片一共有2Kbit空间，也就是最大可以储存256个字节数据，储�
+             -��地址为0x00~0xff;
+  18          *******************/
+  19          void Write_EEPROM(unsigned char addr, unsigned char Data)
+  20          {
+  21   1              unsigned char i = 0, t = 10;
+  22   1              IIC_Start();
+  23   1              IIC_SendByte(0xA0);
+  24   1              IIC_WaitAck();
+  25   1              IIC_SendByte(addr);
+  26   1              IIC_WaitAck();
+  27   1              IIC_SendByte(Data);
+  28   1              IIC_WaitAck();
+  29   1              IIC_Stop();
+  30   1      
+  31   1              //      operate_delay(10);
+  32   1              while (t--)
+  33   1              {
+  34   2                      for (i = 0; i < 112; i++)
+  35   2                              ;
+  36   2              }
+  37   1      }
+  38          
+  39          unsigned char Read_EEPROM(unsigned char addr)
+  40          {
+  41   1              unsigned char Data;
+  42   1      
+  43   1              IIC_Start();
+  44   1              IIC_SendByte(0xA0);
+  45   1              IIC_WaitAck();
+  46   1              IIC_SendByte(addr);
+  47   1              IIC_WaitAck();
+  48   1              IIC_Start();
+  49   1              IIC_SendByte(0xA1);
+C51 COMPILER V9.60.0.0   EEPROM                                                            03/18/2023 15:19:24 PAGE 2   
+
+  50   1              IIC_WaitAck();
+  51   1              Data = IIC_RecByte();
+  52   1              IIC_SendAck(0);
+  53   1              IIC_Stop();
+  54   1      
+  55   1              return Data;
+  56   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    114    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

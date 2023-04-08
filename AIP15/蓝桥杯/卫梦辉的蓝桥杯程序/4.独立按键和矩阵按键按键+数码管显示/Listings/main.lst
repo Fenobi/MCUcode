@@ -1,0 +1,49 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              12/18/2022 14:26:01 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\MDK5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+   2          #include "delay.h"//延时函数头文件
+   3          #include "smg.h"//数码管函数头文件
+   4          #include "key.h"//按键函数头文件
+   5          
+   6          void main()
+   7          {
+   8   1        u8 key_value;
+   9   1        while(1)
+  10   1        {
+  11   2          //实验1 （独立按键，注意跳线冒得插在独立按键）
+  12   2      //    key_value=DL_key1();//读取按键值
+  13   2      //    Display_2_WEI(1,key_value);//数码管显示键值
+  14   2          
+  15   2      //////    //实验2 （独立按键，注意跳线冒得插在独立按键）xxxxxx没有写完
+  16   2      ////////    key_value=DL_key2();//读取按键值
+  17   2      ////////    Display_2_WEI(1,key_value);//数码管显示键值
+  18   2      //////    
+  19   2          
+  20   2          //实验3 （矩阵按键，注意跳线冒得插在矩阵按键）
+  21   2          key_value=JZ_key();//读取按键值
+  22   2          Display_2_WEI(1,key_value);//数码管显示键值
+  23   2      
+  24   2        }
+  25   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     14    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

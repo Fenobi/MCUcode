@@ -1,0 +1,246 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2023 14:17:16 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "smg.h"
+   2          #include "led.h"
+   3          #include "key.h"
+   4          #include "iic.h"
+   5          #include "onewire.h"
+   6          #include "public.h"
+   7          #include "ds1302.h"
+   8          
+   9          u8 smg_display_num_arr[]={10,10,10,10,10,10,10,10};
+  10          u8 smg_display_addr_arr[]={0,0,0,0,0,0,0,0};
+  11          u8 smg_display_point_arr[]={0,0,0,0,0,0,0,0};
+  12          u8 smg_slow_down;
+  13          u8 key_val,key_down,key_up,key_slow_down,key_old;
+  14          u8 led_display_arr[]={0,0,0,0,0,0,0,0};
+  15          u8 pos;
+  16          u8 time[] = {0, 0, 0};
+  17          u8 mode;
+  18          u8 work_mode;
+  19          
+  20          u8 time_display_arr[]={23,25,0x00};
+  21          u8 time_flag;
+  22          
+  23          float temperlate;
+  24          float temperlate_set;
+  25          float set_temp_ok;
+  26          
+  27          u8 L3;
+  28          u8 L1;
+  29          u8 led_flag;
+  30          
+  31          void key()
+  32          {
+  33   1              if(key_slow_down) return;
+  34   1              key_slow_down=1;
+  35   1              
+  36   1              key_val=key_val_B();
+  37   1              key_down=key_val & (key_val ^ key_old);
+  38   1              key_up=~key_val & (key_val ^ key_old);
+  39   1              key_old=key_val;
+  40   1      
+  41   1              if(mode==2)
+  42   1              {
+  43   2                      if(key_old==17)
+  44   2                      {
+  45   3                              time_flag=1;
+  46   3                      }
+  47   2                      else 
+  48   2                              time_flag=0;
+  49   2              }
+  50   1              
+  51   1              switch(key_down)
+  52   1              {
+  53   2                      case 12:
+  54   2                              if(++mode==4) 
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2023 14:17:16 PAGE 2   
+
+  55   2                              {
+  56   3                                      mode=1;
+  57   3                                      set_temp_ok=temperlate_set;
+  58   3                              }
+  59   2                              break;
+  60   2                      case 13:
+  61   2                              work_mode ^= 1;
+  62   2                              break;
+  63   2                      case 16:
+  64   2                              if(mode==3)
+  65   2                                      if(++temperlate_set>=99) temperlate_set=99;
+  66   2                              break;
+  67   2                      case 17:
+  68   2                              if(mode==3)
+  69   2                                      if(--temperlate_set<=10) temperlate_set=10;
+  70   2                              break;
+  71   2              }
+  72   1      }
+  73          
+  74          void smg()
+  75          {
+  76   1              if(smg_slow_down) return;
+  77   1              smg_slow_down=1;
+  78   1      
+  79   1              temperlate = read_ds18b20_temperature();
+  80   1      
+  81   1              smg_display_num_arr[0] = 14;
+  82   1              smg_display_num_arr[1] = mode;
+  83   1              if(mode==1)
+  84   1                      smg_display_point_arr[6]=1;
+  85   1              else
+  86   1                      smg_display_point_arr[6]=0;
+  87   1              switch(mode)
+  88   1              {
+  89   2                      case 1:
+  90   2                      smg_display_num_arr[3] = 10;
+  91   2                      smg_display_num_arr[4] = 10;
+  92   2                      smg_display_num_arr[5] = (u8)temperlate / 10;
+  93   2                      smg_display_num_arr[6] = (u8)temperlate % 10;
+  94   2                      smg_display_num_arr[7] = (u8)temperlate * 10 % 10;
+  95   2                      break;
+  96   2                      case 2:
+  97   2                      read_time_func(time_display_arr);
+  98   2                      smg_display_num_arr[3] = time_display_arr[0+time_flag] / 10;
+  99   2                      smg_display_num_arr[4] = time_display_arr[0+time_flag] % 10;
+ 100   2                      smg_display_num_arr[5]=13;
+ 101   2                      smg_display_num_arr[6] = time_display_arr[1+time_flag] / 10;
+ 102   2                      smg_display_num_arr[7] = time_display_arr[1+time_flag] % 10;
+ 103   2                      break;
+ 104   2                      case 3:
+ 105   2                      smg_display_num_arr[3] = 10;
+ 106   2                      smg_display_num_arr[4] = 10;
+ 107   2                      smg_display_num_arr[5] = 10;
+ 108   2                      smg_display_num_arr[6] = (u8)temperlate_set / 10;
+ 109   2                      smg_display_num_arr[7] = (u8)temperlate_set % 10;
+ 110   2              }
+ 111   1              
+ 112   1      }
+ 113          
+ 114          void led()
+ 115          {
+ 116   1              if(work_mode==0)//温控模式
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2023 14:17:16 PAGE 3   
+
+ 117   1              {
+ 118   2                      led_display_arr[1]=1;
+ 119   2                      if(set_temp_ok<temperlate)
+ 120   2                      {
+ 121   3                              RELAY(1);
+ 122   3                              led_flag=1;
+ 123   3                      }
+ 124   2                      else
+ 125   2                              RELAY(0);
+ 126   2              }
+ 127   1              else
+ 128   1              {
+ 129   2                      led_display_arr[1]=0;
+ 130   2                      if(time_display_arr[1]==0 && time_display_arr[2]==0)
+ 131   2                      {
+ 132   3                              
+ 133   3                      }
+ 134   2              }
+ 135   1              
+ 136   1      }
+ 137          
+ 138          void Timer0_Isr(void) interrupt 1
+ 139          {
+ 140   1              if(++smg_slow_down==500) smg_slow_down=0;
+ 141   1              if(++key_slow_down==10) key_slow_down=0;
+ 142   1              
+ 143   1              if(++pos==8) pos=0;
+ 144   1              smg_display(pos,smg_display_num_arr[pos],smg_display_point_arr[pos]);
+ 145   1              led_display(pos,led_display_arr[pos]);
+ 146   1      }
+ 147          
+ 148          void Timer0_Init(void)          //1毫秒@12.000MHz
+ 149          {
+ 150   1              AUXR &= 0x7F;                   //定时器时钟12T模式
+ 151   1              TMOD &= 0xF0;                   //设置定时器模式
+ 152   1              TL0 = 0x18;                             //设置定时初始值
+ 153   1              TH0 = 0xFC;                             //设置定时初始值
+ 154   1              TF0 = 0;                                //清除TF0标志
+ 155   1              TR0 = 1;                                //定时器0开始计时
+ 156   1              ET0 = 1;                                //使能定时器0中断
+ 157   1              EA = 1;
+ 158   1      }
+ 159          
+ 160          void Timer1_Isr(void) interrupt 3
+ 161          {
+ 162   1              if(led_flag)
+ 163   1              {
+ 164   2                      if(++L1==300) 
+ 165   2                      {
+ 166   3                              L1=0;
+ 167   3                              led_display_arr[0]=1;
+ 168   3                      }
+ 169   2                      else
+ 170   2                              led_display_arr[0]=0;
+ 171   2              }
+ 172   1      }
+ 173          
+ 174          void Timer1_Init(void)          //1毫秒@12.000MHz
+ 175          {
+ 176   1              AUXR &= 0xBF;                   //定时器时钟12T模式
+ 177   1              TMOD &= 0x0F;                   //设置定时器模式
+ 178   1              TL1 = 0x18;                             //设置定时初始值
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2023 14:17:16 PAGE 4   
+
+ 179   1              TH1 = 0xFC;                             //设置定时初始值
+ 180   1              TF1 = 0;                                //清除TF1标志
+ 181   1              TR1 = 1;                                //定时器1开始计时
+ 182   1              ET1 = 1;                                //使能定时器1中断
+ 183   1      }
+ 184          
+ 185          
+ 186          void System_Init()
+ 187          {
+ 188   1              P0 = 0xff;
+ 189   1              P2 = P2 & 0x1f | 0x80;
+ 190   1              P2 &= 0x1f;
+ 191   1              
+ 192   1              P0 = 0x00;
+ 193   1              P2 = P2 & 0x1f | 0xa0;
+ 194   1              P2 &= 0x1f;
+ 195   1      }
+ 196          
+ 197          void main()
+ 198          {
+ 199   1              Timer0_Init();
+ 200   1              Timer1_Init();
+ 201   1              System_Init();
+ 202   1              BUZZ(1);
+ 203   1              read_ds18b20_temperature();
+ 204   1              Delay1ms(500);
+ 205   1              set_time_func(time_display_arr);
+ 206   1              mode=1;
+ 207   1              temperlate_set=23.0;
+ 208   1              set_temp_ok=23.0;
+ 209   1              
+ 210   1              while (1)
+ 211   1              {
+ 212   2                      key();
+ 213   2                      smg();
+ 214   2                      led();
+ 215   2              }
+ 216   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    722    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     63    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

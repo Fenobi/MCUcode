@@ -1,0 +1,53 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              03/01/2020 10:54:42 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil~5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.
+                    -lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.h>
+   2          #include <intrins.h>
+   3          
+   4          #include "iic.h"
+   5          #include "EEPROM.h"
+   6          #include "led.h"
+   7          
+   8          void Close_Buzz();
+   9          
+  10          void main()
+  11          {
+  12   1        unsigned char temp = 0; 
+  13   1        Close_Buzz();
+  14   1        Write_EEPROM(0x00,1);
+  15   1        temp = Read_EEPROM(0x00);
+  16   1        while(1)
+  17   1        {
+  18   2          Display(temp);  
+  19   2        }
+  20   1      }
+  21          
+  22          void Close_Buzz()
+  23          {
+  24   1        P0 = 0x00;
+  25   1        P2 = 0xA0;
+  26   1        _nop_();
+  27   1        _nop_();
+  28   1        P2 = 0x00;  
+  29   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     38    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

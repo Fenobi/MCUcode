@@ -1,0 +1,46 @@
+延时10微妙
+void delay10us(void)   //误差 -0.234375us
+{
+    unsigned char a;
+    for(a=2;a>0;a--);
+}
+
+void delay100us(void)   //误差 -0.173611111111us
+{
+    unsigned char a,b;
+    for(b=1;b>0;b--)
+        for(a=43;a>0;a--);
+}
+
+延时1毫秒
+void delay1ms(void)   //误差 -0.6510void41666667us
+{
+    unsigned char a,b;
+    for(b=4;b>0;b--)
+        for(a=113;a>0;a--);
+}
+
+
+中断（10微妙计数一次）
+
+void InitTimer0(void)
+{
+    TMOD = 0x01;
+    TH0 = 0x0FF;
+    TL0 = 0x0F7;
+    EA = 1;
+    ET0 = 1;
+    TR0 = 1;
+}
+
+void main(void)
+{
+    InitTimer0();
+}
+
+void Timer0Interrupt(void) interrupt 1
+{
+    TH0 = 0x0FF;
+    TL0 = 0x0F7;
+    //add your code here!
+}

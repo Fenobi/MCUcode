@@ -1,0 +1,150 @@
+C51 COMPILER V9.54   MAIN                                                                  03/28/2023 15:01:39 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(9,SPEED) BROWSE INCDIR(..\Driver) DEBUG OBJECTEXTEND PRI
+                    -NT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /* 
+   2              大模板 V3 更新说明 若非特殊需求 无需使用此版本 （因为我觉得这样调用起来还是稍微有点儿麻烦的）
+   3              
+   4              优化设计串口程序时 内存容易溢出的问题
+   5              
+   6              例程调用如下：
+   7              
+   8              -------------Led相关-------------
+   9              Led X 开 -> Function_Buf[X] |= 1
+  10              Led X 关 -> Function_Buf[X] &= 0
+  11              Led X 开关切换 -> Function_Buf[X] ^= 1
+  12              
+  13              -------------Seg相关-------------
+  14              Point X 开 -> Function_Buf[X] |= 1  << 4
+  15              Point X 关 -> Function_Buf[X] &= 0  << 4
+  16              Point X 开关切换 -> Function_Buf[X] ^= 1  << 4
+  17              
+  18          */
+  19          
+  20          /* 宏定义声明区域 */
+  21          #define Key_Slow 10 //按键减速时间
+  22          #define Seg_Slow 500 //数码管减速时间
+  23          #define Uart_Slow 200 //串口减速时间
+  24          #define Uart_Max_Commad 10 //串口指令长度上限
+  25          
+  26          /* 头文件声明区域 */
+  27          #include <Init.h> //初始化专用头文件
+  28          #include <Key.h> //按键专用头文件
+  29          #include <Seg.h> //数码管专用头文件
+  30          #include <Led.h> //Led专用头文件
+  31          #include <Uart.h> //串口专用头文件
+  32          
+  33          /* 变量声明区域 */
+  34          unsigned int Proc_Slow_Down;//函数减速专用变量
+  35          unsigned char Key_Val,Key_Old;//按键扫描专用变量
+  36          unsigned char Scan_Pos;//动态扫描专用变量
+  37          unsigned char Seg_Buf[8] = {10,10,10,10,10,10,10,10};//显示数据存放数组 默认熄灭
+  38          unsigned char Function_Buf[8] = {0,0,0,0,0,0,0,0};//功能数据存放数组 高位-Led状态 低位-小数点状态
+  39          unsigned char Uart_Recv[10];//串口接收数据储存数组 默认10个字节 若接收数据较长 可更改最大字节数
+  40          unsigned char Uart_Recv_Index;//串口接收数组指针
+  41          unsigned char Uart_Send[10];//串口接收数据储存数组 默认10个字节 若发送数据较长 可更改最大字节数
+  42          
+  43          /* 按键处理函数 */
+  44          void Key_Proc()
+  45          {
+  46   1        unsigned char Key_Up,Key_Down;//定义局部变量减小内存占用
+  47   1        if(Proc_Slow_Down % Key_Slow) return;//按键减速程序
+  48   1        
+  49   1        Key_Val = Key_KBD_Read();//读取按键键码值
+  50   1        Key_Down = Key_Val & (Key_Val ^ Key_Old);//捕捉按键下降沿
+  51   1        Key_Up = ~Key_Val & (Key_Val ^ Key_Old);//捕捉按键上降沿
+  52   1        Key_Old = Key_Val;//辅助扫描变量
+  53   1        
+  54   1      
+C51 COMPILER V9.54   MAIN                                                                  03/28/2023 15:01:39 PAGE 2   
+
+  55   1      }
+  56          
+  57          /* 信息处理函数 */
+  58          void Seg_Proc()
+  59          {
+  60   1        if(Proc_Slow_Down % Seg_Slow) return;//信息减速程序
+  61   1        
+  62   1      }
+  63          
+  64          /* 其他处理函数 */
+  65          void Led_Proc()
+  66          {
+  67   1        
+  68   1      }
+  69          
+  70          /* 串口处理函数 */
+  71          void Uart_Proc()
+  72          {
+  73   1        if(Proc_Slow_Down % Uart_Slow) return;//串口减速程序  
+  74   1        
+  75   1      }
+  76          
+  77          /* 定时器0初始化函数 */
+  78          void Timer0Init(void)   //1毫秒@12.000MHz
+  79          {
+  80   1        AUXR &= 0x7F;   //定时器时钟12T模式
+  81   1        TMOD &= 0xF0;   //设置定时器模式
+  82   1        TL0 = 0x18;   //设置定时初值
+  83   1        TH0 = 0xFC;   //设置定时初值
+  84   1        TF0 = 0;    //清除TF0标志
+  85   1        TR0 = 1;    //定时器0开始计时
+  86   1        ET0 = 1;    //定时器0中断打开
+  87   1        EA = 1;     //总中断打开
+  88   1      }
+  89          
+  90          /* 定时器0中断服务函数 */
+  91          void Timer0Server() interrupt 1
+  92          {
+  93   1        if(++Proc_Slow_Down == 500) Proc_Slow_Down = 0;//减速专用
+  94   1        if(++Scan_Pos == 8) Scan_Pos = 0;//扫描专用
+  95   1        Seg_Disp(Scan_Pos,Seg_Buf[Scan_Pos],Function_Buf[Scan_Pos] & 0xF0);//数码管显示
+  96   1        Led_Disp(Scan_Pos,Function_Buf[Scan_Pos] & 0x0F);//Led显示
+  97   1      }
+  98          
+  99          /* 串口1中断服务函数 */
+ 100          void Uart1Server() interrupt 4
+ 101          {
+ 102   1        if(RI == 1 && Uart_Recv_Index < Uart_Max_Commad) //串口接收数据
+ 103   1        {
+ 104   2          Uart_Recv[Uart_Recv_Index] = SBUF;
+ 105   2          Uart_Recv_Index++;
+ 106   2          RI = 0;
+ 107   2        }
+ 108   1      }
+ 109          
+ 110          void main()
+ 111          {
+ 112   1        Sys_Init();//上电系统初始化
+ 113   1        UartInit(); //串口初始化
+ 114   1        Timer0Init();//定时器0初始化
+ 115   1        while(1)
+ 116   1        {
+C51 COMPILER V9.54   MAIN                                                                  03/28/2023 15:01:39 PAGE 3   
+
+ 117   2          Key_Proc();
+ 118   2          Seg_Proc();
+ 119   2          Led_Proc();
+ 120   2          Uart_Proc();
+ 121   2        }
+ 122   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    253    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     42       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

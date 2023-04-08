@@ -1,0 +1,105 @@
+C51 COMPILER V9.59.0.0   KEY                                                               12/18/2022 14:25:56 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\Objects\key.obj
+COMPILER INVOKED BY: D:\MDK5\C51\BIN\C51.EXE key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\key.lst)
+                    - TABS(2) OBJECT(.\Objects\key.obj)
+
+line level    source
+
+   1          #include "key.h"//按键函数头文件
+   2          #include "delay.h"//延时函数头文件
+   3          
+   4          //简单的独立按键函数(返回对应键值)
+   5          char DL_key1(void)
+   6          {
+   7   1        if(S4==0)//按键S7
+   8   1        {
+   9   2          Delay_ms(5);//延时消抖
+  10   2          if(S4==0)
+  11   2            return 1;//还回值1
+  12   2        } 
+  13   1        else if(S5==0)//按键S6
+  14   1        {
+  15   2          Delay_ms(5);//延时消抖
+  16   2          if(S5==0)
+  17   2            return 2;//还回值2
+  18   2        }
+  19   1        
+  20   1        else if(S6==0)//按键S5
+  21   1        {
+  22   2          Delay_ms(5);//延时消抖
+  23   2          if(S6==0)
+  24   2            return 3;//还回值3
+  25   2        }
+  26   1        else  if(S7==0)//按键S4
+  27   1        {
+  28   2          Delay_ms(5);//延时消抖
+  29   2          if(S7==0)
+  30   2            return 4;//还回值4
+  31   2        }
+  32   1        return 0;//当没有按键按下时还回值为0
+  33   1      }
+  34          
+  35          //复杂的独立按键函数
+  36          void DL_key2()
+  37          {
+  38   1        
+  39   1      }
+  40          
+  41          
+  42          //矩阵按键驱动函数(返回对应键值)
+  43          char JZ_key(void)
+  44          {
+  45   1        char key_value = 0;
+  46   1        
+  47   1        P34 = 1;P35 = 1;P42 = 1;P44 = 1;//将矩阵按键的列GPIO拉高,以便读取引脚电平
+  48   1        P30 = 0;P31 = 0;P32 = 0;P33 = 0;//将矩阵按键的行GPIO拉低,以便被读取低电平
+  49   1        
+  50   1        //列扫描
+  51   1        if ((P34 == 0) || (P35 == 0) || (P42 == 0) || (P44 == 0))
+  52   1        {
+  53   2          Delay_ms(5);//延时消抖
+  54   2          if ((P34 == 0) || (P35 == 0) || (P42 == 0) || (P44 == 0))
+C51 COMPILER V9.59.0.0   KEY                                                               12/18/2022 14:25:56 PAGE 2   
+
+  55   2          {
+  56   3            if(P34 == 0){key_value=4;}
+  57   3            else  if(P35 == 0){key_value=3;}
+  58   3            else  if(P42 == 0){key_value=2;}
+  59   3            else  if(P44 == 0){key_value=1;}      
+  60   3          }
+  61   2        }
+  62   1        
+  63   1        P34 = 0;P35 = 0;P42 = 0;P44 = 0;//将矩阵按键的列GPIO拉低,以便被读取低电平
+  64   1        P30 = 1;P31 = 1;P32 = 1;P33 = 1;//将矩阵按键的行GPIO拉高,以便读取引脚电平
+  65   1        
+  66   1        //行扫描
+  67   1        if ((P30 == 0) || (P31 == 0) || (P32 == 0) || (P33 == 0))
+  68   1        {
+  69   2          Delay_ms(5);//延时消抖
+  70   2          if ((P30 == 0) || (P31 == 0) || (P32 == 0) || (P33 == 0))
+  71   2          {
+  72   3            if(P30 == 0){key_value+=0;}
+  73   3            else  if(P31 == 0){key_value+=4;}
+  74   3            else  if(P32 == 0){key_value+=8;}
+  75   3            else  if(P33 == 0){key_value+=12;}      
+  76   3          }
+  77   2        }
+  78   1        return key_value;
+  79   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    214    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

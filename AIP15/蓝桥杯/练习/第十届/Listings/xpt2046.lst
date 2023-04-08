@@ -1,0 +1,81 @@
+C51 COMPILER V9.60.0.0   XPT2046                                                           04/01/2023 15:27:00 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE XPT2046
+OBJECT MODULE PLACED IN .\Objects\xpt2046.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE App\xpt2046\xpt2046.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\App\xpt2046;.\Pu
+                    -blic;.\App\smg) DEBUG OBJECTEXTEND PRINT(.\Listings\xpt2046.lst) OBJECT(.\Objects\xpt2046.obj)
+
+line level    source
+
+   1          #include "xpt2046.h"
+   2          
+   3          void xpt2046_wirte_data(u8 dat)
+   4          {
+   5   1              u8 i;
+   6   1      
+   7   1              CLK = 0;
+   8   1              _nop_();
+   9   1              for(i=0;i<8;i++)//循环8次，每次传输一位，共一个字节
+  10   1              {
+  11   2                      DIN = dat >> 7;//先传高位再传低位
+  12   2                      dat <<= 1;//将低位移到高位
+  13   2                      CLK = 0;//CLK由低到高产生一个上升沿，从而写入数据
+  14   2                      _nop_();        
+  15   2                      CLK = 1;
+  16   2                      _nop_();
+  17   2              }
+  18   1      }
+  19          
+  20          u16     xpt2046_read_data(void)
+  21          {
+  22   1              u8 i;
+  23   1              u16 dat=0;
+  24   1      
+  25   1              CLK = 0;
+  26   1              _nop_();
+  27   1              for(i=0;i<12;i++)//循环12次，每次读取一位，大于一个字节数，所以返回值类型是u16
+  28   1              {
+  29   2                      dat <<= 1;
+  30   2                      CLK = 1;
+  31   2                      _nop_();
+  32   2                      CLK = 0; //CLK由高到低产生一个下降沿，从而读取数据
+  33   2                      _nop_();
+  34   2                      dat |= DOUT;//先读取高位，再读取低位。      
+  35   2              }
+  36   1              return dat;     
+  37   1      }
+  38          
+  39          u16 xpt2046_read_adc_value(u8 cmd)
+  40          {
+  41   1              u8 i;
+  42   1              u16 adc_value=0;
+  43   1      
+  44   1              CLK = 0;//先拉低时钟
+  45   1              CS  = 0;//使能XPT2046
+  46   1              xpt2046_wirte_data(cmd);//发送命令字
+  47   1              for(i=6; i>0; i--);//延时等待转换结果
+  48   1              CLK = 1;
+  49   1              _nop_();
+  50   1              CLK = 0;//发送一个时钟，清除BUSY
+  51   1              _nop_();
+  52   1              adc_value=xpt2046_read_data();
+  53   1              CS = 1;//关闭XPT2046
+  54   1              return adc_value;
+C51 COMPILER V9.60.0.0   XPT2046                                                           04/01/2023 15:27:00 PAGE 2   
+
+  55   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    117    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,41 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              12/19/2022 16:11:12 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\MDK5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.ls
+                    -t) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.h>
+   2          #include "delay.h"//延时函数头文件
+   3          #include "usart.h"//串口通信函数头文件
+   4          
+   5          void main()
+   6          {
+   7   1        Init_Uart();  
+   8   1        SendString("Welcome to Serial port! \r\n");//发送字符串
+   9   1        while(1)
+  10   1        {
+  11   2          SendByte('W');Delay_ms(500);//发送字符W
+  12   2          SendByte('M');Delay_ms(500);//发送字符M
+  13   2          SendByte('H');Delay_ms(500);//发送字符H
+  14   2          SendString("\r\n");//发送换行
+  15   2          Delay_ms(2000);//延时大概2s
+  16   2        }
+  17   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     66    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
