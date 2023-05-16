@@ -1,8 +1,8 @@
 !*.c
 */*/Listings
 */*/Objects
-*/*/Listings
-*/*/Objects
+Listings
+Objects
 */*/*.Kenobi
 */*/*.uvopt
 */*/*.Kenobi
@@ -25,3 +25,32 @@ settings
 *.ewp
 *.ewt
 *.ewd
+
+*.project
+
+*.bak /s
+*.ddk /s
+*.edk /s
+*.lst /s
+*.lnp /s
+*.mpf /s
+*.mpj /s
+*.obj /s
+*.omf /s
+*.opt /s 
+*.plg /s
+*.rpt /s
+*.tmp /s
+*.__i /s
+*.crf /s
+*.o /s
+*.d /s
+*.axf /s
+*.tra /s
+*.dep /s           
+JLinkLog.txt /s
+
+*.iex /s
+*.htm /s
+*.sct /s
+*.map /s
