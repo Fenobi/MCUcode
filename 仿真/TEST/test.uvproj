@@ -13,13 +13,13 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STC15F2K60S2 Series</Device>
+          <Device>STC15W4K32S4 Series</Device>
           <Vendor>STC</Vendor>
-          <Cpu>IRAM(0-0xFF) XRAM(0-0x6FF) IROM(0-0xEFF8) CLOCK(35000000) MODP2</Cpu>
+          <Cpu>IRAM(0-0xFF) XRAM(0-0xEFF) IROM(0-0xEFF8) CLOCK(35000000) MODP2</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile>"LIB\STARTUP.A51" ("Standard 8051 Startup Code")</StartupFile>
           <FlashDriverDll></FlashDriverDll>
-          <DeviceId>62472</DeviceId>
+          <DeviceId>62761</DeviceId>
           <RegisterFile>STC15F2K60S2.H</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>template</OutputName>
+          <OutputName>test</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -283,7 +283,7 @@
               <XRA>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x700</Size>
+                <Size>0xf00</Size>
               </XRA>
               <XRA512>
                 <Type>0</Type>
@@ -377,44 +377,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>ds1302.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ds1302.c</FilePath>
-            </File>
-            <File>
-              <FileName>iic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\iic.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>onewire.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\onewire.c</FilePath>
-            </File>
-            <File>
-              <FileName>button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\button.c</FilePath>
-            </File>
-            <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>public.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\public.c</FilePath>
-            </File>
-            <File>
-              <FileName>smg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\smg.c</FilePath>
             </File>
           </Files>
         </Group>

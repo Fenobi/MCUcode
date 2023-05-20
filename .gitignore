@@ -3,10 +3,10 @@
 */*/Objects
 Listings
 Objects
-*/*/*.Kenobi
-*/*/*.uvopt
-*/*/*.Kenobi
-*/*/*.uvopt
+*.Kenobi
+*.uvopt
+*.Kenobi
+*.uvopt
 */*/Debug
 */*/setting
 
@@ -54,3 +54,11 @@ JLinkLog.txt /s
 *.htm /s
 *.sct /s
 *.map /s
+*.pdsprj
+*.workspace
+*.plg
+*.Bak
+*.lnp
+*.m51
+*.lst
+*.obj
