@@ -272,7 +272,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>.\User;.\App;.\Public;.\App\12864_ST7920C</IncludePath>
             </VariousControls>
           </C251>
           <Ax51>
@@ -322,12 +322,42 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Source Group 1</GroupName>
+          <GroupName>User</GroupName>
           <Files>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
+              <FilePath>.\User\main.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>App</GroupName>
+          <Files>
+            <File>
+              <FileName>12864_ST7920C.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\12864_ST7920C\12864_ST7920C.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Public</GroupName>
+          <Files>
+            <File>
+              <FileName>public.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Public\public.c</FilePath>
+            </File>
+            <File>
+              <FileName>time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Public\time.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Public\uart.c</FilePath>
             </File>
           </Files>
         </Group>
