@@ -335,16 +335,6 @@
           <GroupName>App</GroupName>
           <Files>
             <File>
-              <FileName>tftlcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\App\tftlcd\tftlcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>touch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\App\touch\touch.c</FilePath>
-            </File>
-            <File>
               <FileName>ADC.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\App\ADC\ADC.c</FilePath>
@@ -373,13 +363,6 @@
         </Group>
         <Group>
           <GroupName>GUI</GroupName>
-          <Files>
-            <File>
-              <FileName>gui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\GUI\gui.c</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>

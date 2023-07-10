@@ -2,7 +2,6 @@
 #include "ADC.h"
 #include "time.h"
 #include "uart.h"
-#include "tftlcd.h"
 
 void system();
 
@@ -19,7 +18,6 @@ void main()
 
     ADC_Init();
     UartInit();
-    LCD_test();
     EA = 1;
     ES = 1;
     while(1)
@@ -33,7 +31,7 @@ void main()
 	 	}
         sprintf(txt, "Vol:%.02f",num);
         UART1_PutStr(txt);
-        DelayMs(200);
+        DelayMs(500);
     }
 }
 

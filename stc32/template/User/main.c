@@ -1,5 +1,4 @@
 #include "public.h"
-#include "12864_st7920c.h"
 #include "time.h"
 #include "uart.h"
 
@@ -16,7 +15,8 @@ void main()
     
     system();
     Timer0_init();
-    UartInit();
+    UART1_config();
+    UART4_config(2);
     EA = 1;
     ES = 1;
     while(1)
@@ -27,7 +27,7 @@ void main()
 	 		rptr &= 0x0f;
 	 	}
         sprintf(txt, "num:%d",num++);
-        UART1_PutStr(txt);
+        UART4_PutStr(txt);
         DelayMs(200);
     }
 }

@@ -333,13 +333,6 @@
         </Group>
         <Group>
           <GroupName>App</GroupName>
-          <Files>
-            <File>
-              <FileName>12864_ST7920C.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\App\12864_ST7920C\12864_ST7920C.c</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>Public</GroupName>
